@@ -1,0 +1,32 @@
+users: {
+  shape: sql_table
+  id: int {constraint: primary_key}
+  name: string
+  updated_at: timestamp with time zone
+  created_at: timestamp with time zone
+}
+
+balances: {
+  shape: sql_table
+  id: int {constraint: primary_key}
+  user_id: int {constraint: foreign_key}
+  amount: int
+  updated_at: timestamp with time zone
+  created_at: timestamp with time zone
+}
+
+transactions (insertion only): {
+  shape: sql_table
+  id: int {constraint: primary_key}
+  user_id: int {constraint: foreign_key}
+  balance_id: int {constraint: foreign_key}
+  type: int (1: addition, 2:consumption, 3: transfer)
+  from: int (user_id set for 3: transfer)
+  to: int (user_id set for 3: transfer)
+  amount: int (positive(+) only)
+  created_at: timestamp with time zone
+}
+
+users.id -> balances.user_id
+users.id -> transactions (insertion only).user_id
+balances.id -> transactions (insertion only).balance_id
