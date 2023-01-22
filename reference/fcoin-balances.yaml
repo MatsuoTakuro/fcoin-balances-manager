@@ -1,0 +1,369 @@
+openapi: 3.1.0
+x-stoplight:
+  id: m82708lnwhw7z
+info:
+  title: fcoin-balances
+  version: '1.0'
+  description: ''
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  '/users/{user_id}':
+    parameters:
+      - $ref: '#/components/parameters/user_id'
+    get:
+      summary: 独自コイン残高・履歴の取得
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/get-users-userId'
+        '400':
+          $ref: '#/components/responses/error'
+        '404':
+          $ref: '#/components/responses/error'
+        '500':
+          $ref: '#/components/responses/error'
+      operationId: get-users-userId
+      description: ''
+    post:
+      summary: 独自コイン残高への追加・消費
+      operationId: post-users-user_id
+      responses:
+        '200':
+          $ref: '#/components/responses/post-users-user_id'
+        '400':
+          $ref: '#/components/responses/error'
+        '404':
+          $ref: '#/components/responses/error'
+        '500':
+          $ref: '#/components/responses/error'
+      requestBody:
+        $ref: '#/components/requestBodies/post-users-user_id'
+  '/users/{user_id}/transfer':
+    parameters:
+      - $ref: '#/components/parameters/user_id'
+    post:
+      summary: 独自コインの送金
+      operationId: post-users-user_id-transfer
+      responses:
+        '200':
+          $ref: '#/components/responses/post-users-user_id-transfer'
+        '400':
+          $ref: '#/components/responses/error'
+        '404':
+          $ref: '#/components/responses/error'
+        '500':
+          $ref: '#/components/responses/error'
+      requestBody:
+        $ref: '#/components/requestBodies/post-users-user_id-transfer'
+  /user:
+    post:
+      summary: ユーザー登録（独自コイン残高の作成）
+      operationId: post-user
+      responses:
+        '201':
+          $ref: '#/components/responses/post-user'
+        '400':
+          $ref: '#/components/responses/error'
+        '500':
+          $ref: '#/components/responses/error'
+      description: ''
+      requestBody:
+        $ref: '#/components/requestBodies/post-user'
+components:
+  schemas:
+    user:
+      title: user
+      type: object
+      examples:
+        - id: 1
+          name: taro
+      x-stoplight:
+        id: 9f6973398284c
+      properties:
+        id:
+          type: integer
+          example: 1
+          minimum: 1
+        name:
+          type: string
+          example: taro
+      required:
+        - id
+        - name
+    balance_trans:
+      title: balance_trans
+      x-stoplight:
+        id: 20a58ea7ed8ff
+      type: object
+      examples:
+        - id: 12345
+          user_id: 1
+          balance_id: 1
+          transfer:
+            id: 12345
+            from_user: 1
+            from_balance: 1
+            to_user: 2
+            to_balance: 2
+            amount: 1000
+            processed_at: '2019-08-24T14:15:22Z'
+          amount: 1000
+          processed_at: '2019-08-24T14:15:22Z'
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          example: 12345
+        user_id:
+          type: integer
+          example: 1
+          minimum: 1
+        balance_id:
+          type: integer
+          example: 1
+          minimum: 1
+        transfer:
+          $ref: '#/components/schemas/transer_trans'
+        amount:
+          type: integer
+          example: 1000
+        processed_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - user_id
+        - balance_id
+        - amount
+        - processed_at
+    transer_trans:
+      title: transer_trans
+      x-stoplight:
+        id: jyq14cr8hfmye
+      type: object
+      examples:
+        - id: 67890
+          from_user: 1
+          from_balance: 1
+          to_user: 2
+          to_balance: 2
+          amount: 1000
+          processed_at: '2019-08-24T14:15:22Z'
+      properties:
+        id:
+          type: integer
+          example: 67890
+          minimum: 1
+        from_user:
+          type: integer
+          minimum: 1
+          example: 1
+        from_balance:
+          type: integer
+          example: 1
+          minimum: 1
+        to_user:
+          type: integer
+          minimum: 1
+          example: 2
+        to_balance:
+          type: integer
+          example: 2
+          minimum: 1
+        amount:
+          type: integer
+          minimum: 1
+          example: 1000
+        processed_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - from_user
+        - from_balance
+        - to_user
+        - to_balance
+    balance:
+      title: balance
+      x-stoplight:
+        id: cjqxe9m0tosyw
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          example: 1
+        amount:
+          type: integer
+          minimum: 0
+          example: 5000
+      examples:
+        - id: 1
+          amount: 5000
+  responses:
+    error:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              err_code:
+                type: string
+              message:
+                type: string
+            required:
+              - err_code
+              - message
+          examples:
+            Example 1:
+              value:
+                err_code: string
+                message: string
+    post-users-user_id:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/balance_trans'
+          examples:
+            Example 1:
+              value:
+                id: 12345
+                user_id: 1
+                balance_id: 1
+                amount: 1000
+                processed_at: '2019-08-24T14:15:22Z'
+    post-users-user_id-transfer:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/balance_trans'
+          examples:
+            Example 1:
+              value:
+                id: 12345
+                user_id: 1
+                balance_id: 1
+                transfer:
+                  id: 67890
+                  from_user: 1
+                  from_balance: 1
+                  to_user: 2
+                  to_balance: 2
+                  amount: 1000
+                  processed_at: '2019-08-24T14:15:22Z'
+                amount: -1000
+                processed_at: '2019-08-24T14:15:22Z'
+    post-user:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              user:
+                $ref: '#/components/schemas/user'
+              balance:
+                $ref: '#/components/schemas/balance'
+          examples:
+            Example 1:
+              value:
+                user:
+                  id: 1
+                  name: taro
+                balance:
+                  id: 1
+                  amount: 0
+    get-users-userId:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              balance:
+                $ref: '#/components/schemas/balance'
+              history:
+                type: array
+                items:
+                  $ref: '#/components/schemas/balance_trans'
+          examples:
+            Example 1:
+              value:
+                balance:
+                  id: 1
+                  amount: 4000
+                history:
+                  - id: 12345
+                    user_id: 1
+                    balance_id: 1
+                    amount: 5000
+                    processed_at: '2019-08-24T14:15:22Z'
+                  - id: 12345
+                    user_id: 1
+                    balance_id: 1
+                    transfer:
+                      id: 12345
+                      from_user: 1
+                      from_balance: 1
+                      to_user: 2
+                      to_balance: 2
+                      amount: 1000
+                      processed_at: '2019-08-24T14:15:22Z'
+                    amount: -1000
+                    processed_at: '2019-08-24T14:15:22Z'
+  parameters:
+    user_id:
+      name: user_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        example: '1'
+  requestBodies:
+    post-users-user_id:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              amount:
+                type: integer
+                example: 1000
+          examples:
+            Example 1:
+              value:
+                amount: 1000
+    post-users-user_id-transfer:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: integer
+                example: 2
+                minimum: 1
+              amount:
+                type: integer
+                example: 1000
+                minimum: 1
+          examples:
+            Example 1:
+              value:
+                user_id: 2
+                amount: 1000
+    post-user:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: taro
+            required:
+              - name
