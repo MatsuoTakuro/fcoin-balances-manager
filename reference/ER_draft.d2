@@ -22,7 +22,7 @@ balance_trans (insertion only): {
   balance_id: bigint {constraint: foreign_key}
   transfer_id: bigint (if done by transfer) {constraint: foreign_key}
   amount: bigint (including negative(-))
-  created_at: timestamp with time zone
+  processed_at: timestamp with time zone
 }
 
 transfer_trans (insertion only): {
@@ -33,7 +33,7 @@ transfer_trans (insertion only): {
   to_user: bigint (user_id) {constraint: foreign_key}
   to_balance: bigint (balance_id) {constraint: foreign_key}
   amount: bigint (for double checking later with ones in balance_trans)
-  created_at: timestamp with time zone
+  processed_at: timestamp with time zone
 }
 
 # balances' keys
