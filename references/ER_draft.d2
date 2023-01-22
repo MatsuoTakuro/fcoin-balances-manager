@@ -1,32 +1,52 @@
 users: {
   shape: sql_table
-  id: int {constraint: primary_key}
+  id: bigint {constraint: primary_key}
   name: string
-  updated_at: timestamp with time zone
   created_at: timestamp with time zone
+  updated_at: timestamp with time zone
 }
 
 balances: {
   shape: sql_table
-  id: int {constraint: primary_key}
-  user_id: int {constraint: foreign_key}
-  amount: int
+  id: bigint {constraint: primary_key}
+  user_id: bigint {constraint: foreign_key}
+  amount: bigint
+  created_at: timestamp with time zone
   updated_at: timestamp with time zone
-  created_at: timestamp with time zone
 }
 
-transactions (insertion only): {
+balance_trans (insertion only): {
   shape: sql_table
-  id: int {constraint: primary_key}
-  user_id: int {constraint: foreign_key}
-  balance_id: int {constraint: foreign_key}
-  type: int (1: addition, 2:consumption, 3: transfer)
-  from: int (user_id set for 3: transfer)
-  to: int (user_id set for 3: transfer)
-  amount: int (positive(+) only)
+  id: bigint {constraint: primary_key}
+  user_id: bigint {constraint: foreign_key}
+  balance_id: bigint {constraint: foreign_key}
+  transfer_id: bigint (if done by transfer) {constraint: foreign_key}
+  amount: bigint (including negative(-))
   created_at: timestamp with time zone
 }
 
+transfer_trans (insertion only): {
+  shape: sql_table
+  id: bigint {constraint: primary_key}
+  from_user: bigint (user_id) {constraint: foreign_key}
+  from_balance: bigint (balance_id) {constraint: foreign_key}
+  to_user: bigint (user_id) {constraint: foreign_key}
+  to_balance: bigint (balance_id) {constraint: foreign_key}
+  amount: bigint (for double checking later with ones in balance_trans)
+  created_at: timestamp with time zone
+}
+
+# balances' keys
 users.id -> balances.user_id
-users.id -> transactions (insertion only).user_id
-balances.id -> transactions (insertion only).balance_id
+
+# balance_trans' keys
+users.id -> balance_trans (insertion only).user_id
+balances.id -> balance_trans (insertion only).balance_id
+transfer_trans (insertion only).id -> balance_trans (insertion only).transfer_id
+
+# transfer_trans' keys
+users.id -> transfer_trans (insertion only).from_user
+users.id -> transfer_trans (insertion only).to_user
+balances.id -> transfer_trans (insertion only).from_balance
+balances.id -> transfer_trans (insertion only).to_balance
+
