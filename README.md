@@ -8,8 +8,8 @@
 
 ### API仕様（on draft）
 
-- 更新予定
+- [fcoin-balances APIs (stoplight's workspace)](https://retail-ai.stoplight.io/docs/fcoin-balances-manager/m82708lnwhw7z-fcoin-balances)
 
 ### ER図（on draft）
 
-![ER Diagram on draft](/references/ER_draft.svg "ER Diagram on draft")
+![ER Diagram on draft](/reference/ER_draft.svg "ER Diagram on draft")
