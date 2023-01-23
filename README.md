@@ -1,5 +1,7 @@
 # fcoin-balances-manager
 
+- 独自コイン（Fcoin = fan coin）の残高を管理するシステム
+
 ## 起動方法
 
 - 更新予定
