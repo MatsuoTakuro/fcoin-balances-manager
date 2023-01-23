@@ -8,7 +8,7 @@
 
 ### API仕様（on draft）
 
-- [fcoin-balances APIs (stoplight's workspace)](https://retail-ai.stoplight.io/docs/fcoin-balances-manager/m82708lnwhw7z-fcoin-balances)
+- [fcoin-balances APIs (markdown)](/reference/fcoin-balances.md)
 
 ### ER図（on draft）
 
