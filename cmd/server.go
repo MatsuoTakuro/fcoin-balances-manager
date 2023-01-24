@@ -26,14 +26,14 @@ func NewServer(l net.Listener, router http.Handler) *Server {
 }
 
 func (s *Server) Run(ctx context.Context) error {
-	// 割り込みシグナルまたは終了シグナルの受信のために待機する。
+	// 割り込みシグナルまたは終了シグナルの受信のために待機する
 	ctx, stop := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
 	eg, ctx := errgroup.WithContext(ctx)
 	eg.Go(func() error {
-		// シャットダウンの実行結果を判定する。
-		// http.Server.Shutdown()が正常終了した場合のhttp.ErrServerClosedステータスは除外する。
+		// シャットダウンの実行結果を判定する
+		// http.Server.Shutdown()が正常終了した場合のhttp.ErrServerClosedステータスは除外する
 		if err := s.srv.Serve(s.l); err != nil && err != http.ErrServerClosed {
 			return fmt.Errorf("failed to close: %+v", err)
 		}
@@ -41,11 +41,11 @@ func (s *Server) Run(ctx context.Context) error {
 	})
 
 	<-ctx.Done()
-	// グレースフルシャットダウンを実行する。
+	// グレースフルシャットダウンを実行する
 	if err := s.srv.Shutdown(context.Background()); err != nil {
 		log.Printf("failed to shutdown: +%v", err)
 	}
 
-	// シャットダウンの実行結果を受ける。
+	// シャットダウンの実行結果を受ける
 	return eg.Wait()
 }

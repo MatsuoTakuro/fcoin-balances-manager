@@ -8,7 +8,7 @@ import (
 )
 
 /*
-エラーの場合も含めて、この関数で返却するレスポンスを作成する。
+エラーの場合も含めて、この関数で返却するレスポンスを作成する
 */
 func Respond(ctx context.Context, w http.ResponseWriter, body any, statusCode int) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")

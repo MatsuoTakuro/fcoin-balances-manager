@@ -3,7 +3,7 @@ package clock
 import "time"
 
 /*
-リアルの現在時間とは別に、テスト用の固定の時間を設定できることを可能にする。
+リアルの現在時間とは別に、テスト用の固定の時間を設定できることを可能にする
 */
 type Clocker interface {
 	Now() time.Time

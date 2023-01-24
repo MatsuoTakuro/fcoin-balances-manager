@@ -12,10 +12,10 @@ type Config struct {
 }
 
 /*
-環境変数を読み込む。
-環境変数の値が設定されていない場合は、envDefaultの値が代入される。
+環境変数を読み込む
+環境変数の値が設定されていない場合は、envDefaultの値が代入される
 ローカルでは、envDefaultの値を使用し、
-CIやdev/stg/prod各環境では、別途適切な値を設定するようにする。
+CIやdev/stg/prod各環境では、別途適切な値を設定するようにする
 */
 func New() (*Config, error) {
 	cfg := &Config{}
