@@ -264,18 +264,28 @@ components:
           schema:
             type: object
             properties:
-              user:
-                $ref: '#/components/schemas/user'
+              user_id:
+                type: integer
+                minimum: 1
+                example: 1
+              name:
+                type: string
+                example: taro
               balance:
-                $ref: '#/components/schemas/balance'
+                type: object
+                minProperties: 1
+                maxProperties: 1
+                properties:
+                  amount:
+                    type: integer
+                    minimum: 0
+                    example: 0
           examples:
             Example 1:
               value:
-                user:
-                  id: 1
-                  name: taro
+                user_id: 1
+                name: taro
                 balance:
-                  id: 1
                   amount: 0
     get-users-userId:
       description: Example response
