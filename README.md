@@ -15,7 +15,7 @@
 - 以下のmakeコマンドでlocalサーバからも閲覧可能
 
   ```sh
-  make watch_APIs_specs_on_local_server
+  make watch_APIs_specs
   ```
 
 ### ER図（on draft）
@@ -25,5 +25,5 @@
 - 以下のmakeコマンドでlocalサーバからも閲覧可能
 
   ```sh
-  make watch_ER_diagram_on_local_server
+  make watch_ER_diagram
   ```
