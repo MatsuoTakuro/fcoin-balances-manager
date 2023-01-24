@@ -25,8 +25,7 @@ type registerUserRespBody struct {
 }
 
 type balanceRespBody struct {
-	BalanceID entity.BalanceID `json:"balance_id,omitempty"`
-	Amount    uint32           `json:"amount"`
+	Amount uint32 `json:"amount"`
 }
 
 func (ru *RegisterUser) ServeHTTP(w http.ResponseWriter, r *http.Request) {

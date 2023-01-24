@@ -372,12 +372,9 @@ This operation does not require authentication
 
 ```json
 {
-  "user": {
-    "id": 1,
-    "name": "taro"
-  },
+  "user_id": 1,
+  "name": "taro",
   "balance": {
-    "id": 1,
     "amount": 0
   }
 }
@@ -411,11 +408,9 @@ Status Code **201**
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|» user|[user](#schemauser)|false|none|none|
-|»» id|integer|true|none|none|
-|»» name|string|true|none|none|
-|» balance|[balance](#schemabalance)|false|none|none|
-|»» id|integer|false|none|none|
+|» user_id|integer|false|none|none|
+|» name|string|false|none|none|
+|» balance|object|false|none|none|
 |»» amount|integer|false|none|none|
 
 Status Code **400**
