@@ -12,6 +12,5 @@ type Repository struct {
 }
 
 type UserRegisterRepo interface {
-	CreateUser(ctx context.Context, db Execer, name string) (*entity.User, error)
-	CreateBalance(ctx context.Context, db Execer, userID entity.UserID) (*entity.Balance, error)
+	UserRegisterWithTx(ctx context.Context, db Beginner, name string) (*entity.User, *entity.Balance, error)
 }

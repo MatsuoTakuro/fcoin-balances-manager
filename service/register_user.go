@@ -17,25 +17,9 @@ func (ru *RegisterUserServiceImpl) RegisterUser(
 	ctx context.Context, name string,
 ) (*entity.User, *entity.Balance, error) {
 
-	tx, err := ru.DB.BeginTx(ctx, nil)
+	user, balance, err := ru.Repo.UserRegisterWithTx(ctx, ru.DB, name)
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to begin trans for register_user: %w", err)
+		return nil, nil, fmt.Errorf("failed to register user: %w", err)
 	}
-	defer tx.Rollback()
-
-	user, err := ru.Repo.CreateUser(ctx, tx, name)
-	if err != nil {
-		return nil, nil, fmt.Errorf("failed to create user for register_user: %w", err)
-	}
-
-	balance, err := ru.Repo.CreateBalance(ctx, tx, user.ID)
-	if err != nil {
-		return nil, nil, fmt.Errorf("failed to create balance for register_user: %w", err)
-	}
-
-	if err := tx.Commit(); err != nil {
-		return nil, nil, fmt.Errorf("failed to commit trans for register_user: %w", err)
-	}
-
-	return user, balance, nil
+	return user, balance, err
 }
