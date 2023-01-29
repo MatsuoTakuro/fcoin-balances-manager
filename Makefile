@@ -30,6 +30,8 @@ down: ## サービス（appとdb）を停止・削除する
 down_app: ## appを停止・削除する
 	docker compose rm app --stop --force
 
+reload_app: down_app up_app
+
 rm: down rm_volume ## サービス（appとdb）を停止・削除（volumeも）する
 
 status: ## サービス（appとdb）のステータスを確認する

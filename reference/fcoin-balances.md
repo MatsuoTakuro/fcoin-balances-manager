@@ -142,11 +142,11 @@ Status Code **500**
 This operation does not require authentication
 </aside>
 
-## post-users-user_id
+## patch-users-user_id
 
-<a id="opIdpost-users-user_id"></a>
+<a id="opIdpatch-users-user_id"></a>
 
-`POST /users/{user_id}`
+`PATCH /users/{user_id}`
 
 *独自コイン残高への追加・消費*
 
@@ -158,7 +158,7 @@ This operation does not require authentication
 }
 ```
 
-<h3 id="post-users-user_id-parameters">Parameters</h3>
+<h3 id="patch-users-user_id-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
@@ -201,7 +201,7 @@ This operation does not require authentication
 }
 ```
 
-<h3 id="post-users-user_id-responses">Responses</h3>
+<h3 id="patch-users-user_id-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -210,7 +210,7 @@ This operation does not require authentication
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Example response|Inline|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Example response|Inline|
 
-<h3 id="post-users-user_id-responseschema">Response Schema</h3>
+<h3 id="patch-users-user_id-responseschema">Response Schema</h3>
 
 Status Code **400**
 
