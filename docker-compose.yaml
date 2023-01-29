@@ -34,8 +34,10 @@ services:
       MYSQL_DATABASE: ${DATABASE} # 各環境に合わせて設定（ローカルでは.envを使う）
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 10s
       timeout: 10s
       retries: 5
+      start_period: 50s
     ports:
       - "3306:3306"
     volumes:
