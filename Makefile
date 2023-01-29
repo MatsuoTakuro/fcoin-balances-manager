@@ -1,33 +1,45 @@
 
-render_ER_diagram_to_svg: ## ER図をSVG画像ファイルにレンダリングする
+render_er_diagram_to_svg: ## ER図をSVG画像ファイルにレンダリングする
 	d2 ./reference/ER_draft.d2
 
-watch_ER_diagram: ## ER図をローカルサーバで起動・閲覧する
+watch_er_diagram: ## ER図をローカルサーバで起動・閲覧する
 	d2 ./reference/ER_draft.d2 --watch --host 127.0.0.1 --port 54321
 
-render_APIs_specs_to_md: ## API仕様書をMarkdown形式にレンダリングする
+render_apis_specs_to_md: ## API仕様書をMarkdown形式にレンダリングする
 	npx widdershins --omitHeader --code true ./reference/fcoin-balances.yaml ./reference/fcoin-balances.md
 
-watch_APIs_specs: ## API仕様書をローカルサーバで起動・閲覧する
+watch_apis_specs: ## API仕様書をローカルサーバで起動・閲覧する
 	npx @redocly/cli preview-docs  reference/fcoin-balances.yaml --host "127.0.0.1" --port 65535
 
-build: ## サービス（appとdb）をビルドする
+build: ## サービス（app）をビルドする
 	docker compose build --no-cache
 
-up: ## サービス（appとdb）を起動する
+run: ## buildされたサービス（appとdb）を起動する
 	docker compose up -d
+
+run_app: ## buildされたappを起動する
+	docker compose up app -d
+
+up: build run ## サービス（appとdb）をビルド・起動する
+
+up_app: build run_app ## appをビルド・起動する
 
 down: ## サービス（appとdb）を停止・削除する
 	docker compose down
 
-ps: ## サービス（appとdb）のステータスを確認する
+down_app: ## appを停止・削除する
+	docker compose rm app --stop --force
+
+rm: down rm_volume ## サービス（appとdb）を停止・削除（volumeも）する
+
+status: ## サービス（appとdb）のステータスを確認する
 	docker compose ps --all
 
-logs_app: ## appのログを閲覧する
-	docker compose logs app
+app_logs: ## appのログを閲覧する
+	docker compose logs app --no-log-prefix
 
-logs_db: ## appのログを閲覧する
-	docker compose logs db
+db_logs: ## appのログを閲覧する
+	docker compose logs db --no-log-prefix
 
 db_in: ## 起動しているdbに接続する
 	mysql -h 127.0.0.1 -u taro --password=pass fcoin-balances-db
@@ -37,7 +49,7 @@ rm_volume: ## ローカルのvolumeを削除する
 
 test: ## テストを実行する
   ## go: -race requires cgo; enable cgo by setting CGO_ENABLED=1
-	go test -race -shuffle=on -covermode=atomic ./...
+	go test -v -race -shuffle=on -covermode=atomic ./...
 
 help: ## makeコマンドの一覧を表示する
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \

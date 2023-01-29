@@ -2,11 +2,9 @@ package repository
 
 import (
 	"context"
-	"errors"
-	"fmt"
 
+	"github.com/MatsuoTakuro/fcoin-balances-manager/apperror"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
-	"github.com/go-sql-driver/mysql"
 )
 
 func (r *Repository) CreateBalance(
@@ -18,15 +16,17 @@ func (r *Repository) CreateBalance(
 
 	result, err := db.ExecContext(ctx, sql, userID, 0, r.Clocker.Now(), r.Clocker.Now())
 	if err != nil {
-		var mysqlErr *mysql.MySQLError
-		if errors.As(err, &mysqlErr) && mysqlErr.Number == MySQLDuplicateEntryErrCode {
-			return nil, fmt.Errorf("can create only one balance per same user_id: %w", ErrAlreadyEntry)
+		if isDuplicateEntryErr(err) {
+			err = apperror.RegisterDuplicateDataRestricted.Wrap(err, "can create only one balance per same user_id")
+			return nil, err
 		}
+		err = apperror.RegisterDataFailed.Wrap(err, "failed to create balance")
 		return nil, err
 	}
 
 	id, err := result.LastInsertId()
 	if err != nil {
+		err = apperror.RegisterDataFailed.Wrap(err, "failed to get inserted balance_id")
 		return nil, err
 	}
 

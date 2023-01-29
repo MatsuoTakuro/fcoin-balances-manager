@@ -2,11 +2,9 @@ package repository
 
 import (
 	"context"
-	"errors"
-	"fmt"
 
+	"github.com/MatsuoTakuro/fcoin-balances-manager/apperror"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
-	"github.com/go-sql-driver/mysql"
 )
 
 func (r *Repository) CreateUser(
@@ -18,15 +16,17 @@ func (r *Repository) CreateUser(
 
 	result, err := db.ExecContext(ctx, sql, name, r.Clocker.Now(), r.Clocker.Now())
 	if err != nil {
-		var mysqlErr *mysql.MySQLError
-		if errors.As(err, &mysqlErr) && mysqlErr.Number == MySQLDuplicateEntryErrCode {
-			return nil, fmt.Errorf("cannot create same name user: %w", ErrAlreadyEntry)
+		if isDuplicateEntryErr(err) {
+			err = apperror.RegisterDuplicateDataRestricted.Wrap(err, "cannot create same name user")
+			return nil, err
 		}
+		err = apperror.RegisterDataFailed.Wrap(err, "failed to create user")
 		return nil, err
 	}
 
 	id, err := result.LastInsertId()
 	if err != nil {
+		err = apperror.RegisterDataFailed.Wrap(err, "failed to get inserted user_id")
 		return nil, err
 	}
 

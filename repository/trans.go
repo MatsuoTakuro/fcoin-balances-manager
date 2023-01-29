@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/MatsuoTakuro/fcoin-balances-manager/apperror"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
 )
 
@@ -13,22 +13,24 @@ func (r *Repository) UserRegisterWithTx(
 
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to begin trans for register_user: %w", err)
+		err = apperror.RegisterDataFailed.Wrap(err, "failed to begin transaction for registering user")
+		return nil, nil, err
 	}
 	defer tx.Rollback()
 
 	user, err := r.CreateUser(ctx, tx, name)
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to create user for register_user: %w", err)
+		return nil, nil, err
 	}
 
 	balance, err := r.CreateBalance(ctx, tx, user.ID)
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to create balance for register_user: %w", err)
+		return nil, nil, err
 	}
 
 	if err := tx.Commit(); err != nil {
-		return nil, nil, fmt.Errorf("failed to commit trans for register_user: %w", err)
+		err = apperror.RegisterDataFailed.Wrap(err, "failed to commit transaction for registering user")
+		return nil, nil, err
 	}
 
 	return user, balance, nil
