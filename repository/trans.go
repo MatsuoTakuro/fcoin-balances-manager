@@ -16,7 +16,14 @@ func (r *Repository) UserRegisterWithTx(
 		err = apperror.RegisterDataFailed.Wrap(err, "failed to begin transaction for registering user")
 		return nil, nil, err
 	}
-	defer tx.Rollback()
+	// TODO: deferのRollbackエラーを拾う方法を調べる
+	defer func() error {
+		if err := tx.Rollback(); err == nil {
+			err = apperror.RegisterDataFailed.Wrap(err, "failed to rollback transaction for registering user")
+			return err
+		}
+		return nil
+	}()
 
 	user, err := r.CreateUser(ctx, tx, name)
 	if err != nil {
