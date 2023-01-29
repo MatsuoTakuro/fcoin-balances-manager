@@ -25,12 +25,12 @@ paths:
           $ref: '#/components/responses/error'
       operationId: get-users-userId
       description: ''
-    post:
+    patch:
       summary: 独自コイン残高への追加・消費
-      operationId: post-users-user_id
+      operationId: patch-users-user_id
       responses:
         '200':
-          $ref: '#/components/responses/post-users-user_id'
+          $ref: '#/components/responses/patch-users-user_id'
         '400':
           $ref: '#/components/responses/error'
         '404':
@@ -38,7 +38,7 @@ paths:
         '500':
           $ref: '#/components/responses/error'
       requestBody:
-        $ref: '#/components/requestBodies/post-users-user_id'
+        $ref: '#/components/requestBodies/patch-users-user_id'
   '/users/{user_id}/transfer':
     parameters:
       - $ref: '#/components/parameters/user_id'
@@ -221,7 +221,7 @@ components:
               value:
                 err_code: string
                 message: string
-    post-users-user_id:
+    patch-users-user_id:
       description: Example response
       content:
         application/json:
@@ -334,7 +334,7 @@ components:
         type: integer
         example: '1'
   requestBodies:
-    post-users-user_id:
+    patch-users-user_id:
       content:
         application/json:
           schema:
