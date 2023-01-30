@@ -12,20 +12,23 @@ const (
 	/*
 		api層のエラー
 	*/
-	DecodeReqBodyFailed  ErrCode = "decode_req_body_failed"
-	BadParam             ErrCode = "bad_param" // リクエストデータが不適切
-	EncodeRespBodyFailed ErrCode = "encode_resp_body_failed"
-	WriteRespBodyFailed  ErrCode = "write_resp_body_failed"
+
+	DecodeReqBodyFailed  ErrCode = "decode_req_body_failed"  // リクエストデータの読み込みに失敗
+	BadParam             ErrCode = "bad_param"               // リクエストデータが不適切
+	EncodeRespBodyFailed ErrCode = "encode_resp_body_failed" // レスポンスデータの変換(JSON)に失敗
+	WriteRespBodyFailed  ErrCode = "write_resp_body_failed"  // レスポンスデータの書き込みに失敗
 
 	/*
 		service層のエラー
 	*/
-	ConsumedAmountOverBalance ErrCode = "consumed_amount_over_balance"
-	OverMaxBalanceLimit       ErrCode = "over_max_balance_limit"
+
+	ConsumedAmountOverBalance ErrCode = "consumed_amount_over_balance" // 残高を超える消費・使用
+	OverMaxBalanceLimit       ErrCode = "over_max_balance_limit"       // 追加される残高の合計が上限額を超える
 
 	/*
 		repository層のエラー
 	*/
+
 	RegisterDataFailed              ErrCode = "register_data_failed"               // データ登録自体に失敗
 	RegisterDuplicateDataRestricted ErrCode = "register_duplicate_data_restricted" // 重複データであるため登録不可
 	GetDataFailed                   ErrCode = "get_data_failed"                    // データ取得自体に失敗
