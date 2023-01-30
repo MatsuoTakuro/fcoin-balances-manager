@@ -38,7 +38,7 @@
     {"user_id":1,"name":"taro","balance":{"amount":0}}%
     ```
 
- 3. Fcoin残高に5000を追加する
+ 3. Fcoin残高に5000コインを追加する
 
     > curl -XPATCH localhost:8080/users/{user_id} -d '{"amount": 5000}'
 
@@ -49,7 +49,7 @@
     {"balance_trans_id":1,"user_id":1,"balance_id":1,"amount":5000,"processed_at":"2023-01-30T16:01:33.132934637Z"}%
     ```
 
- 4. Fcoin残高から3000を消費する
+ 4. Fcoin残高から3000コインを消費する
 
     > curl -XPATCH localhost:8080/users/{user_id} -d '{"amount": -3000}'
 
@@ -60,7 +60,7 @@
     {"balance_trans_id":2,"user_id":1,"balance_id":1,"amount":-3000,"processed_at":"2023-01-30T16:02:22.89337084Z"}%
     ```
 
- 5. 別のユーザーに（Fcoin残高を消費して）1000を転送する
+ 5. 別のユーザーに（Fcoin残高を消費して）1000コインを転送する
 
     > curl -XPOST localhost:8080/users/{user_id}/transfer -d '{"user_id": {someones user_id}, "amount": 1000}'
 
