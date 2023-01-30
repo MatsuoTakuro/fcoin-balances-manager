@@ -67,7 +67,7 @@ func (r *Repository) UpdateBalanceWithTx(
 		}
 	}()
 
-	balanceTrans, err = r.CreateBalanceTrans(ctx, tx, userID, balanceID, amount)
+	balanceTrans, err = r.CreateBalanceTransWithoutTransfer(ctx, tx, userID, balanceID, amount)
 	if err != nil {
 		return nil, err
 	}

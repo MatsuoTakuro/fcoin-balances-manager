@@ -7,7 +7,7 @@ import (
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
 )
 
-func (r *Repository) CreateBalanceTrans(
+func (r *Repository) CreateBalanceTransWithoutTransfer(
 	ctx context.Context, db Execer, userID entity.UserID, balanceID entity.BalanceID, amount int32,
 ) (*entity.BalanceTrans, error) {
 	sql := `INSERT INTO balance_trans (
