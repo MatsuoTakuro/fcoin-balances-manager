@@ -80,7 +80,7 @@
     curl GET localhost:8080/users/{user_id}
     ```
 
- 7. サービスを停止する（コンテナを削除する）
+ 7. サービスを停止する（コンテナも削除）
 
     > make down（`Makefile`を使用）
 
