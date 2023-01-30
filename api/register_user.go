@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/MatsuoTakuro/fcoin-balances-manager/api/params"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/apperror"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/service"
@@ -43,7 +44,7 @@ func (ru *RegisterUser) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err := ru.Validator.Struct(reqBody); err != nil {
 		err = apperror.BadParam.Wrap(err,
 			fmt.Sprintf("invalid request params for registering user: %v",
-				invalidParams(ru.Validator, err)))
+				params.InvalidBodyItems(ru.Validator, err)))
 		apperror.ErrorRespond(ctx, w, err)
 		return
 	}

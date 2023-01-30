@@ -38,3 +38,11 @@ func (r *Repository) CreateBalance(
 
 	return balance, nil
 }
+
+func (r *Repository) GetBalanceByUserID(ctx context.Context, db Queryer, userID entity.UserID) (*entity.Balance, error) {
+	return nil, nil
+}
+
+func (r *Repository) UpdateBalance(ctx context.Context, db Execer, balanceID entity.BalanceID, amount int32) error {
+	return nil
+}

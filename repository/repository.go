@@ -12,5 +12,10 @@ type Repository struct {
 }
 
 type UserRegisterRepo interface {
-	UserRegisterWithTx(ctx context.Context, db Beginner, name string) (*entity.User, *entity.Balance, error)
+	RegisterUserWithTx(ctx context.Context, db Beginner, name string) (*entity.User, *entity.Balance, error)
+}
+
+type BalanceUpdaterRepo interface {
+	GetBalanceByUserID(ctx context.Context, db Queryer, userID entity.UserID) (*entity.Balance, error)
+	UpdateBalanceWithTx(ctx context.Context, db Beginner, userID entity.UserID, balanceID entity.BalanceID, amount int32) (*entity.BalanceTrans, error)
 }

@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/MatsuoTakuro/fcoin-balances-manager/contexts"
+	"github.com/MatsuoTakuro/fcoin-balances-manager/appcontext"
 )
 
 /*
@@ -20,7 +20,7 @@ func ErrorRespond(ctx context.Context, w http.ResponseWriter, err error) {
 		appErr = UnknownErr.Wrap(err, "not found app_error").(*AppError)
 	}
 
-	traceID := contexts.GetTracdID(ctx)
+	traceID := appcontext.GetTracdID(ctx)
 	log.Printf("[%d]error: %s: %s -> %s\n",
 		traceID, appErr.ErrCode, appErr.ErrMessage, appErr.Err)
 
@@ -29,6 +29,7 @@ func ErrorRespond(ctx context.Context, w http.ResponseWriter, err error) {
 	case NoSelectedData:
 		statusCode = http.StatusNotFound
 	case DecodeReqBodyFailed, BadParam,
+		AmountOverBalance,
 		NoTargetData, RegisterDuplicateDataRestricted:
 		statusCode = http.StatusBadRequest
 	default:

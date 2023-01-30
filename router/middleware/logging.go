@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/MatsuoTakuro/fcoin-balances-manager/appcontext"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/apperror"
-	"github.com/MatsuoTakuro/fcoin-balances-manager/contexts"
 )
 
 type respLoggingWriter struct {
@@ -52,19 +52,19 @@ func Logging() func(next http.Handler) http.Handler {
 				apperror.ErrorRespond(r.Context(), w, err)
 			}
 			defer r.Body.Close()
-			traceID := contexts.NewTraceID()
+			traceID := appcontext.NewTraceID()
 
 			log.Printf("[%d]req: %s %s %s\n", traceID, r.RequestURI, r.Method, reqBody)
 
-			respBody := &bytes.Buffer{}
-			rlw := NewRespLoggingWriter(w, respBody)
-			ctx := contexts.SetTraceID(r.Context(), traceID)
+			respBodyBuf := &bytes.Buffer{}
+			rlw := NewRespLoggingWriter(w, respBodyBuf)
+			ctx := appcontext.SetTraceID(r.Context(), traceID)
 			r = r.WithContext(ctx)
 			r.Body = io.NopCloser(bytes.NewBuffer(reqBody))
 
 			next.ServeHTTP(rlw, r)
 
-			log.Printf("[%d]resp: %d %s\n", traceID, rlw.statusCode, respBody)
+			log.Printf("[%d]resp: %d %s\n", traceID, rlw.statusCode, respBodyBuf)
 		})
 	}
 }

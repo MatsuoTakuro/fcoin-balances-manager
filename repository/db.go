@@ -40,14 +40,20 @@ func OpenDB(ctx context.Context, cfg *config.Config) (*sqlx.DB, func(), error) {
 type Beginner interface {
 	BeginTx(ctx context.Context, opts *sql.TxOptions) (*sql.Tx, error)
 	Execer
+	Queryer
 }
 
 type Execer interface {
 	ExecContext(ctx context.Context, query string, args ...any) (sql.Result, error)
 }
 
+type Queryer interface {
+	QueryRowxContext(ctx context.Context, query string, args ...any) *sqlx.Row
+}
+
 var (
 	_ Beginner = (*sqlx.DB)(nil)
 	_ Execer   = (*sqlx.DB)(nil)
 	_ Execer   = (*sqlx.Tx)(nil)
+	_ Queryer  = (*sqlx.DB)(nil)
 )

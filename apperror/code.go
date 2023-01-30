@@ -20,6 +20,7 @@ const (
 	/*
 		service層のエラー
 	*/
+	AmountOverBalance ErrCode = "amount_over_balance"
 
 	/*
 		repository層のエラー

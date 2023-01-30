@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/MatsuoTakuro/fcoin-balances-manager/api"
+	"github.com/MatsuoTakuro/fcoin-balances-manager/api/params"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/config"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/repository"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/repository/clock"
@@ -35,13 +36,22 @@ func NewRouter(ctx context.Context, cfg *config.Config) (http.Handler, func(), e
 
 	// 以下、各API（ハンドラ）に対して、実装されたservice・dbと、公開するpathを割り当てる
 	ru := &api.RegisterUser{
-		Service: &service.RegisterUserServiceImpl{
+		Service: &service.RegisterUserServicer{
 			DB:   db,
 			Repo: &repo,
 		},
 		Validator: v,
 	}
 	r.Post("/user", ru.ServeHTTP)
+
+	ub := &api.UpdateBalance{
+		Service: &service.UpdateBalanceServicer{
+			DB:   db,
+			Repo: &repo,
+		},
+		Validator: v,
+	}
+	r.Patch(fmt.Sprintf("/users/{%s}", params.UserID.Path()), ub.ServeHTTP)
 
 	return r, cleanup, nil
 }

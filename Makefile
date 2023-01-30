@@ -37,10 +37,10 @@ rm: down rm_volume ## サービス（appとdb）を停止・削除（volumeも�
 status: ## サービス（appとdb）のステータスを確認する
 	docker compose ps --all
 
-app_logs: ## appのログを閲覧する
+log_app: ## appのログを閲覧する
 	docker compose logs app --no-log-prefix
 
-db_logs: ## appのログを閲覧する
+log_db: ## appのログを閲覧する
 	docker compose logs db --no-log-prefix
 
 db_in: ## 起動しているdbに接続する
