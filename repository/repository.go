@@ -17,5 +17,5 @@ type UserRegisterRepo interface {
 
 type BalanceUpdaterRepo interface {
 	GetBalanceByUserID(ctx context.Context, db Queryer, userID entity.UserID) (*entity.Balance, error)
-	UpdateBalanceWithTx(ctx context.Context, db Beginner, userID entity.UserID, balanceID entity.BalanceID, amount int32) (*entity.BalanceTrans, error)
+	UpdateBalanceWithTx(ctx context.Context, db Beginner, userID entity.UserID, balanceID entity.BalanceID, amount int32, balanceAmount uint32) (*entity.BalanceTrans, error)
 }

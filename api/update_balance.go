@@ -51,11 +51,12 @@ func (ub *UpdateBalance) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	strUserID := chi.URLParam(r, params.UserID.Name)
-	userID, err := (strconv.Atoi(strUserID))
+	userID, err := strconv.ParseInt(strUserID, 10, 64)
 	if err != nil || userID < 1 {
 		err = apperror.BadParam.Wrap(err, fmt.Sprintf("invalid request params for updating balance: %s: %s",
 			params.UserID, strUserID))
 		apperror.ErrorRespond(ctx, w, err)
+		return
 	}
 
 	balanceTrans, err := ub.Service.UpdateBalance(ctx, entity.UserID(userID), reqBody.Amount)

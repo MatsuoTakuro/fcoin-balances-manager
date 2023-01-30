@@ -29,7 +29,7 @@ func ErrorRespond(ctx context.Context, w http.ResponseWriter, err error) {
 	case NoSelectedData:
 		statusCode = http.StatusNotFound
 	case DecodeReqBodyFailed, BadParam,
-		AmountOverBalance,
+		ConsumedAmountOverBalance, OverMaxBalanceLimit,
 		NoTargetData, RegisterDuplicateDataRestricted:
 		statusCode = http.StatusBadRequest
 	default:

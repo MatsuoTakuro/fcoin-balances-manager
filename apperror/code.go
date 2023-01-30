@@ -20,7 +20,8 @@ const (
 	/*
 		service層のエラー
 	*/
-	AmountOverBalance ErrCode = "amount_over_balance"
+	ConsumedAmountOverBalance ErrCode = "consumed_amount_over_balance"
+	OverMaxBalanceLimit       ErrCode = "over_max_balance_limit"
 
 	/*
 		repository層のエラー

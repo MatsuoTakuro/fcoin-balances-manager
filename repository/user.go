@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/MatsuoTakuro/fcoin-balances-manager/apperror"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
@@ -17,7 +18,8 @@ func (r *Repository) CreateUser(
 	result, err := db.ExecContext(ctx, sql, name, r.Clocker.Now(), r.Clocker.Now())
 	if err != nil {
 		if isDuplicateEntryErr(err) {
-			err = apperror.RegisterDuplicateDataRestricted.Wrap(err, "cannot create same name user")
+			err = apperror.RegisterDuplicateDataRestricted.Wrap(err,
+				fmt.Sprintf("cannot create same name user: %s", name))
 			return nil, err
 		}
 		err = apperror.RegisterDataFailed.Wrap(err, "failed to create user")

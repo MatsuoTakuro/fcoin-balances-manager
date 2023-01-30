@@ -21,3 +21,20 @@ func (b *Balance) CanBeZeroOrMore(amount int32) bool {
 	}
 	return true
 }
+
+func (b *Balance) CanExceedMaxLimit(amount int32) bool {
+	if amount > 0 {
+		current := uint64(b.Amount)
+		amount := uint64(amount)
+		return (current + amount) > 2147483647
+	}
+	return false
+}
+
+func (b *Balance) UpdateAmount(amount int32) {
+	if amount < 0 {
+		b.Amount -= uint32(-amount)
+	} else {
+		b.Amount += uint32(amount)
+	}
+}

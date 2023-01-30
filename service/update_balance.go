@@ -24,12 +24,18 @@ func (ru *UpdateBalanceServicer) UpdateBalance(
 	}
 
 	if !balance.CanBeZeroOrMore(amount) {
-		err := apperror.NewAppError(apperror.AmountOverBalance,
-			fmt.Sprintf("amount exceeds balance => input amount: %d, balance: %d", amount, balance.Amount))
+		err := apperror.NewAppError(apperror.ConsumedAmountOverBalance,
+			fmt.Sprintf("amount consumed exceeds current balance => input amount: %d, balance: %d", amount, balance.Amount))
 		return nil, err
 	}
+	if balance.CanExceedMaxLimit(amount) {
+		err := apperror.NewAppError(apperror.OverMaxBalanceLimit,
+			fmt.Sprintf("total amount exceeds max balance limit => input amount: %d, balance: %d", amount, balance.Amount))
+		return nil, err
+	}
+	balance.UpdateAmount(amount)
 
-	balanceTrans, err := ru.Repo.UpdateBalanceWithTx(ctx, ru.DB, userID, balance.ID, amount)
+	balanceTrans, err := ru.Repo.UpdateBalanceWithTx(ctx, ru.DB, userID, balance.ID, amount, balance.Amount)
 	if err != nil {
 		return nil, err
 	}
