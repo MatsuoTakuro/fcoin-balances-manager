@@ -18,7 +18,7 @@ type RegisterUser struct {
 }
 
 type registerUserReqBody struct {
-	Name string `json:"name" validate:"required"`
+	Name string `json:"name" validate:"required,excludesall='\""`
 }
 
 type registerUserRespBody struct {
