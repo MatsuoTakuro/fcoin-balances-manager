@@ -6,7 +6,7 @@
 
  1. サービスを起動する
 
-    > `make up`（`Makefile`を使用）
+    > make up（`Makefile`を使用）
      - 例
 
     ```sh
@@ -29,7 +29,7 @@
 
  2. ユーザーとして新規登録する（Fcoin残高を作成する）
 
-      > `curl -XPOST localhost:8080/user -d '{"name": "{your name}"}'`
+      > curl -XPOST localhost:8080/user -d '{"name": "{your name}"}'
 
     - 例
 
@@ -40,7 +40,7 @@
 
  3. Fcoin残高に5000を追加する
 
-    > `curl -XPATCH localhost:8080/users/{user_id} -d '{"amount": 5000}'`
+    > curl -XPATCH localhost:8080/users/{user_id} -d '{"amount": 5000}'
 
     - 例
 
@@ -51,7 +51,7 @@
 
  4. Fcoin残高から3000を消費する
 
-    > `curl -XPATCH localhost:8080/users/{user_id} -d '{"amount": -3000}'`
+    > curl -XPATCH localhost:8080/users/{user_id} -d '{"amount": -3000}'
 
     - 例
 
@@ -62,7 +62,7 @@
 
  5. 別のユーザーに（Fcoin残高を消費して）1000を転送する
 
-    > `curl -XPOST localhost:8080/users/{user_id}/transfer -d '{"user_id": {someones user_id}, "amount": 1000}'`
+    > curl -XPOST localhost:8080/users/{user_id}/transfer -d '{"user_id": {someones user_id}, "amount": 1000}'
 
     - 例
 
@@ -72,7 +72,7 @@
 
  6. 現在のFcoin残高とその取引履歴を確認する
 
-    > `curl GET localhost:8080/users/{user_id}`
+    > curl GET localhost:8080/users/{user_id}
 
     - 例
 
