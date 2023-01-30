@@ -11,6 +11,8 @@ render_apis_specs_to_md: ## API仕様書をMarkdown形式にレンダリング�
 watch_apis_specs: ## API仕様書をローカルサーバで起動・閲覧する
 	npx @redocly/cli preview-docs  reference/fcoin-balances.yaml --host "127.0.0.1" --port 65535
 
+update_docs: render_er_diagram_to_svg render_apis_specs_to_md ## ドキュメントを一式更新する
+
 build: ## サービス（app）をビルドする
 	docker compose build --no-cache
 
