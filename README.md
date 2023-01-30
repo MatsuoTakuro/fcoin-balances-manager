@@ -22,9 +22,9 @@
     Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
     docker compose up -d
     [+] Running 3/3
-    ⠿ Network fcoin-balances-manager_default  Created 0.0s
-    ⠿ Container fcoin-balances-db             Healthy 10.9s
-    ⠿ Container fcoin-balances-manager        Started
+    ⠿ Network fcoin-balances-manager_default  Created     0.0s
+    ⠿ Container fcoin-balances-db             Healthy     10.9s
+    ⠿ Container fcoin-balances-manager        Started     11.2s
     ```
 
  2. ユーザーとして新規登録する（Fcoin残高を作成する）
@@ -78,6 +78,21 @@
 
     ```sh
     curl GET localhost:8080/users/{user_id}
+    ```
+
+ 7. サービスを停止する（コンテナを削除する）
+
+    > make down（`Makefile`を使用）
+
+    - 例
+
+    ```sh
+    make down
+    docker compose down
+    [+] Running 3/3
+    ⠿ Container fcoin-balances-manager        Removed         0.2s
+    ⠿ Container fcoin-balances-db             Removed         1.6s
+    ⠿ Network fcoin-balances-manager_default  Removed         0.0s
     ```
 
 ## 参考資料
