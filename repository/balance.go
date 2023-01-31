@@ -46,7 +46,9 @@ func (r *Repository) GetBalanceByUserID(ctx context.Context, db Queryer, userID 
 	sql := `SELECT id, amount FROM balances
 					WHERE user_id = ?`
 	result := db.QueryRowxContext(ctx, sql, userID)
-	balance := &entity.Balance{}
+	balance := &entity.Balance{
+		UserID: userID,
+	}
 	err := result.Scan(&balance.ID, &balance.Amount)
 	if err != nil {
 		if errors.Is(err, noRowErr) {

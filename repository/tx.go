@@ -48,7 +48,7 @@ func (r *Repository) RegisterUserWithTx(
 }
 
 func (r *Repository) UpdateBalanceWithTx(
-	ctx context.Context, db Beginner, userID entity.UserID, balanceID entity.BalanceID, amount int32, balanceAmount uint32,
+	ctx context.Context, db Beginner, balance *entity.Balance, amount int32,
 ) (balanceTrans *entity.BalanceTrans, err error) {
 
 	tx, err := db.BeginTx(ctx, nil)
@@ -67,12 +67,12 @@ func (r *Repository) UpdateBalanceWithTx(
 		}
 	}()
 
-	balanceTrans, err = r.CreateBalanceTransWithoutTransfer(ctx, tx, userID, balanceID, amount)
+	balanceTrans, err = r.CreateBalanceTransWithoutTransfer(ctx, tx, balance.UserID, balance.ID, amount)
 	if err != nil {
 		return nil, err
 	}
 
-	err = r.UpdateBalanceByID(ctx, tx, balanceID, balanceAmount)
+	err = r.UpdateBalanceByID(ctx, tx, balance.ID, balance.Amount)
 	if err != nil {
 		return nil, err
 	}

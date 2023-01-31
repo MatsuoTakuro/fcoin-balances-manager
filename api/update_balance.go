@@ -25,11 +25,11 @@ type updateBalanceReqBody struct {
 }
 
 type updateBalanceRespBody struct {
-	BalanceTransID entity.BalanceTransID `json:"balance_trans_id"`
-	UserID         entity.UserID         `json:"user_id"`
-	BalanceID      entity.BalanceID      `json:"balance_id"`
-	Amount         int32                 `json:"amount"`
-	ProcessedAt    time.Time             `json:"processed_at"`
+	ID          entity.BalanceTransID `json:"id"`
+	UserID      entity.UserID         `json:"user_id"`
+	BalanceID   entity.BalanceID      `json:"balance_id"`
+	Amount      int32                 `json:"amount"`
+	ProcessedAt time.Time             `json:"processed_at"`
 }
 
 func (ub *UpdateBalance) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -66,11 +66,11 @@ func (ub *UpdateBalance) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respBody := &updateBalanceRespBody{
-		BalanceTransID: balanceTrans.ID,
-		UserID:         balanceTrans.UserID,
-		BalanceID:      balanceTrans.BalanceID,
-		Amount:         balanceTrans.Amount,
-		ProcessedAt:    balanceTrans.ProcessedAt,
+		ID:          balanceTrans.ID,
+		UserID:      balanceTrans.UserID,
+		BalanceID:   balanceTrans.BalanceID,
+		Amount:      balanceTrans.Amount,
+		ProcessedAt: balanceTrans.ProcessedAt,
 	}
-	Respond(ctx, w, respBody, http.StatusCreated)
+	Respond(ctx, w, respBody, http.StatusOK)
 }

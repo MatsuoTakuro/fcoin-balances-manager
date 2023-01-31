@@ -35,7 +35,7 @@ func (ru *UpdateBalanceServicer) UpdateBalance(
 	}
 	balance.UpdateAmount(amount)
 
-	balanceTrans, err := ru.Repo.UpdateBalanceWithTx(ctx, ru.DB, userID, balance.ID, amount, balance.Amount)
+	balanceTrans, err := ru.Repo.UpdateBalanceWithTx(ctx, ru.DB, balance, amount)
 	if err != nil {
 		return nil, err
 	}
