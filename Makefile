@@ -27,7 +27,7 @@ up: build run ## サービス（appとdb）をビルド・起動する
 up_app: build run_app ## appをビルド・起動する
 
 down: ## サービス（appとdb）を停止・削除する
-	docker compose down
+	docker compose down  --remove-orphans
 
 down_app: ## appを停止・削除する
 	docker compose rm app --stop --force
