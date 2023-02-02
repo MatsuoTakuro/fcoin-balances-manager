@@ -12,3 +12,6 @@ type RegisterUserService interface {
 type UpdateBalanceService interface {
 	UpdateBalance(ctx context.Context, userID entity.UserID, amount int32) (*entity.BalanceTrans, error)
 }
+type TransferCoinsService interface {
+	TransferCoins(ctx context.Context, fromUser entity.UserID, toUser entity.UserID, amount uint32) (*entity.BalanceTrans, error)
+}

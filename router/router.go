@@ -53,5 +53,14 @@ func NewRouter(ctx context.Context, cfg *config.Config) (http.Handler, func(), e
 	}
 	r.Patch(fmt.Sprintf("/users/{%s}", params.UserID.Path()), ub.ServeHTTP)
 
+	tc := &api.TransferCoins{
+		Service: &service.TransferCoinsServicer{
+			DB:   db,
+			Repo: &repo,
+		},
+		Validator: v,
+	}
+	r.Post(fmt.Sprintf("/users/{%s}/transfer", params.UserID.Path()), tc.ServeHTTP)
+
 	return r, cleanup, nil
 }

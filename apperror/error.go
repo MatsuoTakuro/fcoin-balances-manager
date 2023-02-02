@@ -23,6 +23,6 @@ func NewAppError(errCode ErrCode, message string) *AppError {
 	return &AppError{
 		ErrCode:    errCode,
 		ErrMessage: message,
-		Err:        errors.New(message),
+		Err:        errors.New(""),
 	}
 }

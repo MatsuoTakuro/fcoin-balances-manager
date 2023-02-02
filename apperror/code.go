@@ -22,8 +22,9 @@ const (
 		service層のエラー
 	*/
 
-	ConsumedAmountOverBalance ErrCode = "consumed_amount_over_balance" // 残高を超える消費・使用
-	OverMaxBalanceLimit       ErrCode = "over_max_balance_limit"       // 追加される残高の合計が上限額を超える
+	ConsumedAmountOverBalance   ErrCode = "consumed_amount_over_balance"      // 残高を超える消費・使用
+	OverMaxBalanceLimit         ErrCode = "over_max_balance_limit"            // 追加される残高の合計が上限額を超える
+	NoTransferOfCoinsBySameUser ErrCode = "no_transfer_of_coins_by_same_user" // 同一ユーザーによるコイン転送の禁止
 
 	/*
 		repository層のエラー
