@@ -22,13 +22,13 @@ func (r *Repository) CreateBalanceTrans(
 	processedAt := r.Clocker.Now()
 	result, err := db.ExecContext(ctx, sql, userID, balanceID, amount, processedAt)
 	if err != nil {
-		err = apperror.RegisterDataFailed.Wrap(err, "failed to create balance_trans")
+		err = apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to create balance_trans")
 		return nil, err
 	}
 
 	id, err := result.LastInsertId()
 	if err != nil {
-		err = apperror.RegisterDataFailed.Wrap(err, "failed to get inserted balance_trans_id")
+		err = apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to get inserted balance_trans_id")
 		return nil, err
 	}
 
@@ -58,13 +58,13 @@ func (r *Repository) CreateBalanceTransByTransfer(
 	processedAt := r.Clocker.Now()
 	result, err := db.ExecContext(ctx, sql, userID, balanceID, TransferTransID, amount, processedAt)
 	if err != nil {
-		err = apperror.RegisterDataFailed.Wrap(err, "failed to create balance_trans by tranfer")
+		err = apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to create balance_trans by tranfer")
 		return nil, err
 	}
 
 	id, err := result.LastInsertId()
 	if err != nil {
-		err = apperror.RegisterDataFailed.Wrap(err, "failed to get inserted balance_trans_id")
+		err = apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to get inserted balance_trans_id")
 		return nil, err
 	}
 

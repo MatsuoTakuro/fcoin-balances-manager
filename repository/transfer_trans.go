@@ -17,13 +17,13 @@ func (r *Repository) CreateTransferTrans(
 	processedAt := r.Clocker.Now()
 	result, err := db.ExecContext(ctx, sql, fromBalance.UserID, fromBalance.ID, toBalance.UserID, toBalance.ID, amount, processedAt)
 	if err != nil {
-		err = apperror.RegisterDataFailed.Wrap(err, "failed to create transfer_trans")
+		err = apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to create transfer_trans")
 		return nil, err
 	}
 
 	id, err := result.LastInsertId()
 	if err != nil {
-		err = apperror.RegisterDataFailed.Wrap(err, "failed to get inserted transfer_trans_id")
+		err = apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to get inserted transfer_trans_id")
 		return nil, err
 	}
 

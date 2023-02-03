@@ -17,7 +17,7 @@ func ErrorRespond(ctx context.Context, w http.ResponseWriter, err error) {
 
 	var appErr *AppError
 	if !errors.As(err, &appErr) {
-		appErr = UnknownErr.Wrap(err, "not found app_error").(*AppError)
+		appErr = UNKNOWN_ERR.Wrap(err, "not found app_error").(*AppError)
 	}
 
 	traceID := appcontext.GetTracdID(ctx)
@@ -26,11 +26,11 @@ func ErrorRespond(ctx context.Context, w http.ResponseWriter, err error) {
 
 	var statusCode int
 	switch appErr.ErrCode {
-	case NoSelectedData:
+	case NO_SELECTED_DATA:
 		statusCode = http.StatusNotFound
-	case DecodeReqBodyFailed, BadParam,
-		ConsumedAmountOverBalance, OverMaxBalanceLimit,
-		NoTargetData, RegisterDuplicateDataRestricted:
+	case DECODE_REQBODY_FAILED, BAD_PARAM,
+		CONSUMED_AMOUNT_OVER_BALANCE, OVER_MAX_BALANCE_LIMIT,
+		NO_TARGET_DATA, REGISTER_DUPLICATE_DATA_RESTRICTED:
 		statusCode = http.StatusBadRequest
 	default:
 		statusCode = http.StatusInternalServerError

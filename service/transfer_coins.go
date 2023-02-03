@@ -19,7 +19,7 @@ func (tc *TransferCoinsServicer) TransferCoins(
 ) (*entity.BalanceTrans, error) {
 
 	if fromUser == toUser {
-		err := apperror.NewAppError(apperror.NoTransferOfCoinsBySameUser,
+		err := apperror.NewAppError(apperror.NO_TRANSFERRING_COINS_BY_SAME_USER,
 			fmt.Sprintf(
 				"users are the same source and destination of transferring coins => input user_id as source: %d, user_id as destination: %d",
 				fromUser, toUser))
@@ -32,7 +32,7 @@ func (tc *TransferCoinsServicer) TransferCoins(
 	}
 
 	if !fromBalance.CanBeZeroOrMore(-int32(amount)) {
-		err := apperror.NewAppError(apperror.ConsumedAmountOverBalance,
+		err := apperror.NewAppError(apperror.CONSUMED_AMOUNT_OVER_BALANCE,
 			fmt.Sprintf("amount consumed exceeds current balance => input amount: %d, balance: %d", amount, fromBalance.Amount))
 		return nil, err
 	}
@@ -43,7 +43,7 @@ func (tc *TransferCoinsServicer) TransferCoins(
 		return nil, err
 	}
 	if toBalance.CanExceedMaxLimit(int32(amount)) {
-		err := apperror.NewAppError(apperror.OverMaxBalanceLimit,
+		err := apperror.NewAppError(apperror.OVER_MAX_BALANCE_LIMIT,
 			fmt.Sprintf("total amount exceeds max balance limit => input amount: %d, transfered to user_id: %d", amount, toBalance.UserID))
 		return nil, err
 	}

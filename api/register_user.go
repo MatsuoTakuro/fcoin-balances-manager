@@ -36,13 +36,13 @@ func (ru *RegisterUser) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	reqBody := &registerUserReqBody{}
 
 	if err := json.NewDecoder(r.Body).Decode(reqBody); err != nil {
-		err = apperror.DecodeReqBodyFailed.Wrap(err, "failed to decode request body for registering user")
+		err = apperror.DECODE_REQBODY_FAILED.Wrap(err, "failed to decode request body for registering user")
 		apperror.ErrorRespond(ctx, w, err)
 		return
 	}
 
 	if err := ru.Validator.Struct(reqBody); err != nil {
-		err = apperror.BadParam.Wrap(err,
+		err = apperror.BAD_PARAM.Wrap(err,
 			fmt.Sprintf("invalid request params for registering user: %v",
 				params.InvalidBodyItems(ru.Validator, err)))
 		apperror.ErrorRespond(ctx, w, err)

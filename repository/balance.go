@@ -19,17 +19,17 @@ func (r *Repository) CreateBalance(
 	result, err := db.ExecContext(ctx, sql, userID, 0, r.Clocker.Now(), r.Clocker.Now())
 	if err != nil {
 		if isDuplicateEntryErr(err) {
-			err = apperror.RegisterDuplicateDataRestricted.Wrap(err,
+			err = apperror.REGISTER_DUPLICATE_DATA_RESTRICTED.Wrap(err,
 				fmt.Sprintf("can create only one balance per same user_id: %d", userID))
 			return nil, err
 		}
-		err = apperror.RegisterDataFailed.Wrap(err, "failed to create balance")
+		err = apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to create balance")
 		return nil, err
 	}
 
 	id, err := result.LastInsertId()
 	if err != nil {
-		err = apperror.RegisterDataFailed.Wrap(err, "failed to get inserted balance_id")
+		err = apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to get inserted balance_id")
 		return nil, err
 	}
 
@@ -52,11 +52,11 @@ func (r *Repository) GetBalanceByUserID(ctx context.Context, db Queryer, userID 
 	err := result.Scan(&balance.ID, &balance.Amount)
 	if err != nil {
 		if errors.Is(err, noRowErr) {
-			err = apperror.NoSelectedData.Wrap(err,
+			err = apperror.NO_SELECTED_DATA.Wrap(err,
 				fmt.Sprintf("no selected balance by user_id: %d", userID))
 			return nil, err
 		} else {
-			err = apperror.GetDataFailed.Wrap(err,
+			err = apperror.GET_DATA_FAILED.Wrap(err,
 				fmt.Sprintf("failed to get balance by user_id: %d", userID))
 			return nil, err
 		}
@@ -73,7 +73,7 @@ func (r *Repository) UpdateBalanceByID(ctx context.Context, db Execer, balanceID
 	// TODO: 更新日時や金額等で事前に更新が無いかを確認する
 	_, err := db.ExecContext(ctx, sql, amount, r.Clocker.Now(), balanceID)
 	if err != nil {
-		err = apperror.UpdateDataFailed.Wrap(err,
+		err = apperror.UPDATE_DATA_FAILED.Wrap(err,
 			fmt.Sprintf("failed to update balance by id: %d", balanceID))
 		return err
 	}

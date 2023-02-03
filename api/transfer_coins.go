@@ -49,13 +49,13 @@ func (tc *TransferCoins) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	reqBody := &transferCoinsReqBody{}
 
 	if err := json.NewDecoder(r.Body).Decode(reqBody); err != nil {
-		err = apperror.DecodeReqBodyFailed.Wrap(err, "failed to decode request body for trasferring coins")
+		err = apperror.DECODE_REQBODY_FAILED.Wrap(err, "failed to decode request body for trasferring coins")
 		apperror.ErrorRespond(ctx, w, err)
 		return
 	}
 
 	if err := tc.Validator.Struct(reqBody); err != nil {
-		err = apperror.BadParam.Wrap(err,
+		err = apperror.BAD_PARAM.Wrap(err,
 			fmt.Sprintf("invalid request params for trasferring coins: %v",
 				params.InvalidBodyItems(tc.Validator, err)))
 		apperror.ErrorRespond(ctx, w, err)
@@ -65,7 +65,7 @@ func (tc *TransferCoins) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	strUserID := chi.URLParam(r, params.UserID.Name)
 	userID, err := strconv.ParseInt(strUserID, 10, 64)
 	if err != nil || userID < 1 {
-		err = apperror.BadParam.Wrap(err, fmt.Sprintf("invalid request params for trasferring coins: %s: %s",
+		err = apperror.BAD_PARAM.Wrap(err, fmt.Sprintf("invalid request params for trasferring coins: %s: %s",
 			params.UserID, strUserID))
 		apperror.ErrorRespond(ctx, w, err)
 		return

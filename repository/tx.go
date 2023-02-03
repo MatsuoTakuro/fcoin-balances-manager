@@ -19,19 +19,19 @@ func (r *Repository) RegisterUserTx(
 
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
-		err = apperror.RegisterDataFailed.Wrap(err, "failed to begin transaction for registering user")
+		err = apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to begin transaction for registering user")
 		return nil, nil, err
 	}
 	defer func() {
 		if cErr := tx.Commit(); cErr != nil {
-			cErr = apperror.UpdateDataFailed.Wrap(err, err.Error())
-			err = apperror.UpdateDataFailed.Wrap(cErr, "failed to commit transaction for registering user")
+			cErr = apperror.UPDATE_DATA_FAILED.Wrap(err, err.Error())
+			err = apperror.UPDATE_DATA_FAILED.Wrap(cErr, "failed to commit transaction for registering user")
 		}
 
 		if err != nil {
 			if rbErr := tx.Rollback(); rbErr != nil {
-				rbErr = apperror.RegisterDataFailed.Wrap(err, err.Error())
-				err = apperror.RegisterDataFailed.Wrap(rbErr, "failed to rollback transaction for registering user")
+				rbErr = apperror.REGISTER_DATA_FAILED.Wrap(err, err.Error())
+				err = apperror.REGISTER_DATA_FAILED.Wrap(rbErr, "failed to rollback transaction for registering user")
 				return
 			}
 			log.Printf("[%d]trans: rollbacked sucessfully for registering user", appcontext.GetTracdID(ctx))
@@ -58,19 +58,19 @@ func (r *Repository) UpdateBalanceTx(
 
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
-		err = apperror.UpdateDataFailed.Wrap(err, "failed to begin transaction for updating balance")
+		err = apperror.UPDATE_DATA_FAILED.Wrap(err, "failed to begin transaction for updating balance")
 		return nil, err
 	}
 	defer func() {
 		if cErr := tx.Commit(); cErr != nil {
-			cErr = apperror.UpdateDataFailed.Wrap(err, err.Error())
-			err = apperror.UpdateDataFailed.Wrap(cErr, "failed to commit transaction for updating balance")
+			cErr = apperror.UPDATE_DATA_FAILED.Wrap(err, err.Error())
+			err = apperror.UPDATE_DATA_FAILED.Wrap(cErr, "failed to commit transaction for updating balance")
 		}
 
 		if err != nil {
 			if rbErr := tx.Rollback(); rbErr != nil {
-				rbErr = apperror.UpdateDataFailed.Wrap(err, err.Error())
-				err = apperror.UpdateDataFailed.Wrap(rbErr, "failed to rollback transaction for updating balance")
+				rbErr = apperror.UPDATE_DATA_FAILED.Wrap(err, err.Error())
+				err = apperror.UPDATE_DATA_FAILED.Wrap(rbErr, "failed to rollback transaction for updating balance")
 				return
 			}
 			log.Printf("[%d]trans: rollbacked sucessfully for updating balance", appcontext.GetTracdID(ctx))
@@ -96,19 +96,19 @@ func (r *Repository) TransferCoinsTx(
 
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
-		err = apperror.UpdateDataFailed.Wrap(err, "failed to begin transaction for transferring coins")
+		err = apperror.UPDATE_DATA_FAILED.Wrap(err, "failed to begin transaction for transferring coins")
 		return nil, err
 	}
 	defer func() {
 		if cErr := tx.Commit(); cErr != nil {
-			cErr = apperror.UpdateDataFailed.Wrap(err, err.Error())
-			err = apperror.UpdateDataFailed.Wrap(cErr, "failed to commit transaction for transferring coins")
+			cErr = apperror.UPDATE_DATA_FAILED.Wrap(err, err.Error())
+			err = apperror.UPDATE_DATA_FAILED.Wrap(cErr, "failed to commit transaction for transferring coins")
 		}
 
 		if err != nil {
 			if rbErr := tx.Rollback(); rbErr != nil {
-				rbErr = apperror.UpdateDataFailed.Wrap(err, err.Error())
-				err = apperror.UpdateDataFailed.Wrap(rbErr, "failed to rollback transaction for transferring coins")
+				rbErr = apperror.UPDATE_DATA_FAILED.Wrap(err, err.Error())
+				err = apperror.UPDATE_DATA_FAILED.Wrap(rbErr, "failed to rollback transaction for transferring coins")
 				return
 			}
 			log.Printf("[%d]trans: rollbacked sucessfully for transfer coins", appcontext.GetTracdID(ctx))

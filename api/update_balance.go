@@ -37,13 +37,13 @@ func (ub *UpdateBalance) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	reqBody := &updateBalanceReqBody{}
 
 	if err := json.NewDecoder(r.Body).Decode(reqBody); err != nil {
-		err = apperror.DecodeReqBodyFailed.Wrap(err, "failed to decode request body for updating balance")
+		err = apperror.DECODE_REQBODY_FAILED.Wrap(err, "failed to decode request body for updating balance")
 		apperror.ErrorRespond(ctx, w, err)
 		return
 	}
 
 	if err := ub.Validator.Struct(reqBody); err != nil {
-		err = apperror.BadParam.Wrap(err,
+		err = apperror.BAD_PARAM.Wrap(err,
 			fmt.Sprintf("invalid request params for updating balance: %v",
 				params.InvalidBodyItems(ub.Validator, err)))
 		apperror.ErrorRespond(ctx, w, err)
@@ -53,7 +53,7 @@ func (ub *UpdateBalance) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	strUserID := chi.URLParam(r, params.UserID.Name)
 	userID, err := strconv.ParseInt(strUserID, 10, 64)
 	if err != nil || userID < 1 {
-		err = apperror.BadParam.Wrap(err, fmt.Sprintf("invalid request params for updating balance: %s: %s",
+		err = apperror.BAD_PARAM.Wrap(err, fmt.Sprintf("invalid request params for updating balance: %s: %s",
 			params.UserID, strUserID))
 		apperror.ErrorRespond(ctx, w, err)
 		return

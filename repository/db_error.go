@@ -8,13 +8,13 @@ import (
 )
 
 const (
-	MySQLDuplicateEntryErrCode = 1062
+	MYSQL_DUPLICATE_ENTRY_ERRCODE = 1062
 )
 
 var mysqlErr *mysql.MySQLError
 
 func isDuplicateEntryErr(err error) bool {
-	return errors.As(err, &mysqlErr) && mysqlErr.Number == MySQLDuplicateEntryErrCode
+	return errors.As(err, &mysqlErr) && mysqlErr.Number == MYSQL_DUPLICATE_ENTRY_ERRCODE
 }
 
 var noRowErr error = sql.ErrNoRows

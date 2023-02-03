@@ -24,12 +24,12 @@ func (ru *UpdateBalanceServicer) UpdateBalance(
 	}
 
 	if !balance.CanBeZeroOrMore(amount) {
-		err := apperror.NewAppError(apperror.ConsumedAmountOverBalance,
+		err := apperror.NewAppError(apperror.CONSUMED_AMOUNT_OVER_BALANCE,
 			fmt.Sprintf("amount consumed exceeds current balance => input amount: %d, balance: %d", amount, balance.Amount))
 		return nil, err
 	}
 	if balance.CanExceedMaxLimit(amount) {
-		err := apperror.NewAppError(apperror.OverMaxBalanceLimit,
+		err := apperror.NewAppError(apperror.OVER_MAX_BALANCE_LIMIT,
 			fmt.Sprintf("total amount exceeds max balance limit => input amount: %d, balance: %d", amount, balance.Amount))
 		return nil, err
 	}
