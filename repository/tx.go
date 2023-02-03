@@ -24,8 +24,8 @@ func (r *Repository) RegisterUserTx(
 	}
 	defer func() {
 		if cErr := tx.Commit(); cErr != nil {
-			cErr = apperror.UPDATE_DATA_FAILED.Wrap(err, err.Error())
-			err = apperror.UPDATE_DATA_FAILED.Wrap(cErr, "failed to commit transaction for registering user")
+			cErr = apperror.REGISTER_DATA_FAILED.Wrap(err, err.Error())
+			err = apperror.REGISTER_DATA_FAILED.Wrap(cErr, "failed to commit transaction for registering user")
 		}
 
 		if err != nil {
