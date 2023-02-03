@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/MatsuoTakuro/fcoin-balances-manager/api/params"
+	"github.com/MatsuoTakuro/fcoin-balances-manager/api/shared"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/apperror"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/service"
@@ -22,13 +23,9 @@ type registerUserReqBody struct {
 }
 
 type registerUserRespBody struct {
-	UserID  entity.UserID   `json:"user_id"`
-	Name    string          `json:"name"`
-	Balance balanceRespBody `json:"balance"`
-}
-
-type balanceRespBody struct {
-	Amount uint32 `json:"amount"`
+	UserID  entity.UserID  `json:"user_id"`
+	Name    string         `json:"name"`
+	Balance shared.Balance `json:"balance"`
 }
 
 func (ru *RegisterUser) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -58,7 +55,7 @@ func (ru *RegisterUser) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	respBody := &registerUserRespBody{
 		UserID: user.ID,
 		Name:   user.Name,
-		Balance: balanceRespBody{
+		Balance: shared.Balance{
 			Amount: balance.Amount,
 		},
 	}

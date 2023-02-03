@@ -49,6 +49,7 @@ type Execer interface {
 
 type Queryer interface {
 	QueryRowxContext(ctx context.Context, query string, args ...any) *sqlx.Row
+	QueryxContext(ctx context.Context, query string, args ...any) (*sqlx.Rows, error)
 }
 
 var (

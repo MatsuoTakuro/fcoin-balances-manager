@@ -44,6 +44,13 @@ func NewRouter(ctx context.Context, cfg *config.Config) (http.Handler, func(), e
 	}
 	r.Post("/user", ru.ServeHTTP)
 
+	gb := &api.GetBalanceDetails{
+		Service: &service.GetBalanceDetailsServicer{
+			DB:   db,
+			Repo: &repo,
+		},
+		Validator: v,
+	}
 	ub := &api.UpdateBalance{
 		Service: &service.UpdateBalanceServicer{
 			DB:   db,
@@ -51,8 +58,6 @@ func NewRouter(ctx context.Context, cfg *config.Config) (http.Handler, func(), e
 		},
 		Validator: v,
 	}
-	r.Patch(fmt.Sprintf("/users/{%s}", params.UserID.Path()), ub.ServeHTTP)
-
 	tc := &api.TransferCoins{
 		Service: &service.TransferCoinsServicer{
 			DB:   db,
@@ -60,7 +65,11 @@ func NewRouter(ctx context.Context, cfg *config.Config) (http.Handler, func(), e
 		},
 		Validator: v,
 	}
-	r.Post(fmt.Sprintf("/users/{%s}/transfer", params.UserID.Path()), tc.ServeHTTP)
+	r.Route("/users", func(sub chi.Router) {
+		sub.Get(fmt.Sprintf("/{%s}", params.UserID.Path()), gb.ServeHTTP)
+		sub.Patch(fmt.Sprintf("/{%s}", params.UserID.Path()), ub.ServeHTTP)
+		sub.Post(fmt.Sprintf("/{%s}/transfer", params.UserID.Path()), tc.ServeHTTP)
+	})
 
 	return r, cleanup, nil
 }

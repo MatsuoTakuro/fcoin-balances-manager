@@ -23,3 +23,7 @@ type TransferCoinsRepo interface {
 	GetBalanceByUserID(ctx context.Context, db Queryer, userID entity.UserID) (*entity.Balance, error)
 	TransferCoinsTx(ctx context.Context, db Beginner, fromBalance *entity.Balance, toBalance *entity.Balance, amount uint32) (*entity.BalanceTrans, error)
 }
+type BalanceDetailsGetterRepo interface {
+	GetBalanceByUserID(ctx context.Context, db Queryer, userID entity.UserID) (*entity.Balance, error)
+	GetBalanceTransListByBalanceID(ctx context.Context, db Queryer, balanceID entity.BalanceID) ([]*entity.BalanceTrans, error)
+}

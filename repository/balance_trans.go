@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/MatsuoTakuro/fcoin-balances-manager/apperror"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
@@ -77,4 +78,75 @@ func (r *Repository) CreateBalanceTransByTransfer(
 	}
 
 	return balanceTrans, nil
+}
+
+func (r *Repository) GetBalanceTransListByBalanceID(
+	ctx context.Context, db Queryer, balanceID entity.BalanceID,
+) ([]*entity.BalanceTrans, error) {
+	sql := `SELECT bt.id, bt.user_id, bt.balance_id,
+						tt.id, tt.from_user, tt.from_balance, tt.to_user, tt.to_balance, tt.amount, tt.processed_at,
+						bt.amount, bt.processed_at
+					FROM balance_trans AS bt
+					LEFT JOIN transfer_trans AS tt
+					ON bt.transfer_id = tt.id
+					WHERE bt.balance_id = ?
+					ORDER BY bt.processed_at ASC`
+	rows, err := db.QueryxContext(ctx, sql, balanceID)
+	if err != nil {
+		err = apperror.GET_DATA_FAILED.Wrap(err,
+			fmt.Sprintf("failed to get balance_trans by balance_id: %d", balanceID))
+		return nil, err
+	}
+	defer rows.Close()
+
+	var btsOpt []*entity.BalanceTransOpt
+	for rows.Next() {
+		btOpt := entity.BalanceTransOpt{}
+		if err := rows.Scan(
+			&btOpt.ID,
+			&btOpt.UserID,
+			&btOpt.BalanceID,
+			&btOpt.TransferTrans.ID,
+			&btOpt.TransferTrans.FromUser,
+			&btOpt.TransferTrans.FromBalance,
+			&btOpt.TransferTrans.ToUser,
+			&btOpt.TransferTrans.ToBalance,
+			&btOpt.TransferTrans.Amount,
+			&btOpt.TransferTrans.ProcessedAt,
+			&btOpt.Amount,
+			&btOpt.ProcessedAt,
+		); err != nil {
+			err = apperror.GET_DATA_FAILED.Wrap(err,
+				fmt.Sprintf("failed to scan balance_trans gotten by balance_id: %d", balanceID))
+			return nil, err
+		}
+		btsOpt = append(btsOpt, &btOpt)
+	}
+
+	var bts []*entity.BalanceTrans
+	for _, btOpt := range btsOpt {
+		bt := &entity.BalanceTrans{
+			ID:          btOpt.ID,
+			UserID:      btOpt.UserID,
+			BalanceID:   btOpt.BalanceID,
+			Amount:      btOpt.Amount,
+			ProcessedAt: btOpt.ProcessedAt,
+		}
+		if !btOpt.TransferTrans.ID.Valid {
+			bts = append(bts, bt)
+			continue
+		}
+		bt.TransferTrans = entity.TransferTrans{
+			ID:          entity.TransferTransID(uint64(btOpt.TransferTrans.ID.Int64)),
+			FromUser:    entity.UserID(uint64(btOpt.TransferTrans.FromUser.Int64)),
+			FromBalance: entity.BalanceID(uint64(btOpt.TransferTrans.FromBalance.Int64)),
+			ToUser:      entity.UserID(uint64(btOpt.TransferTrans.ToUser.Int64)),
+			ToBalance:   entity.BalanceID(uint64(btOpt.TransferTrans.ToBalance.Int64)),
+			Amount:      uint32(btOpt.TransferTrans.Amount.Int32),
+			ProcessedAt: btOpt.TransferTrans.ProcessedAt.Time,
+		}
+		bts = append(bts, bt)
+	}
+
+	return bts, nil
 }

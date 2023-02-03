@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/MatsuoTakuro/fcoin-balances-manager/api/params"
+	"github.com/MatsuoTakuro/fcoin-balances-manager/api/shared"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/apperror"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/service"
@@ -29,19 +30,9 @@ type transferCoinsRespBody struct {
 	ID          entity.BalanceTransID `json:"id"`
 	UserID      entity.UserID         `json:"user_id"`
 	BalanceID   entity.BalanceID      `json:"balance_id"`
-	Transfer    TransferTransRespBody `json:"transfer"`
+	Transfer    shared.TransferTrans  `json:"transfer"`
 	Amount      int32                 `json:"amount"`
 	ProcessedAt time.Time             `json:"processed_at"`
-}
-
-type TransferTransRespBody struct {
-	ID          entity.TransferTransID `json:"id"`
-	FromUser    entity.UserID          `json:"from_user"`
-	FromBalance entity.BalanceID       `json:"from_balance"`
-	ToUser      entity.UserID          `json:"to_user"`
-	ToBalance   entity.BalanceID       `json:"to_balance"`
-	Amount      uint32                 `json:"amount"`
-	ProcessedAt time.Time              `json:"processed_at"`
 }
 
 func (tc *TransferCoins) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -81,7 +72,7 @@ func (tc *TransferCoins) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		ID:        balanceTrans.ID,
 		UserID:    balanceTrans.UserID,
 		BalanceID: balanceTrans.BalanceID,
-		Transfer: TransferTransRespBody{
+		Transfer: shared.TransferTrans{
 			ID:          balanceTrans.TransferTrans.ID,
 			FromUser:    balanceTrans.TransferTrans.FromUser,
 			FromBalance: balanceTrans.TransferTrans.FromBalance,
