@@ -55,6 +55,9 @@ test: ## テストを実行する
   ## go: -race requires cgo; enable cgo by setting CGO_ENABLED=1
 	go test -v -race -shuffle=on -covermode=atomic ./...
 
+todo: ## TODOを表示する
+	grep "TODO" -rn ./* --exclude-dir=./.git/* --exclude=Makefile
+
 help: ## makeコマンドの一覧を表示する
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 		awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

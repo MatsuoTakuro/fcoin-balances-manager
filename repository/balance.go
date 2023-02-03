@@ -70,6 +70,7 @@ func (r *Repository) UpdateBalanceByID(ctx context.Context, db Execer, balanceID
 					amount = ?, updated_at = ?
 					WHERE id = ?`
 
+	// TODO: 更新日時や金額等で事前に更新が無いかを確認する
 	_, err := db.ExecContext(ctx, sql, amount, r.Clocker.Now(), balanceID)
 	if err != nil {
 		err = apperror.UpdateDataFailed.Wrap(err,
