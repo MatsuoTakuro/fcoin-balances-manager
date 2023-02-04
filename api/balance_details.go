@@ -1,16 +1,12 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/MatsuoTakuro/fcoin-balances-manager/api/params"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/api/shared"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/apperror"
-	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/service"
-	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -27,16 +23,13 @@ type getBalanceDetailsRespBody struct {
 func (gb *GetBalanceDetails) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	strUserID := chi.URLParam(r, params.UserID.Name)
-	userID, err := strconv.ParseInt(strUserID, 10, 64)
-	if err != nil || userID < 1 {
-		err = apperror.BAD_PARAM.Wrap(err, fmt.Sprintf("invalid request params for getting balance details: %s: %s",
-			params.UserID, strUserID))
+	userID, err := params.UserID.Parse(r)
+	if err != nil {
 		apperror.ErrorRespond(ctx, w, err)
 		return
 	}
 
-	balance, history, err := gb.Service.GetBalanceDetails(ctx, entity.UserID(userID))
+	balance, history, err := gb.Service.GetBalanceDetails(ctx, userID)
 	if err != nil {
 		apperror.ErrorRespond(ctx, w, err)
 		return

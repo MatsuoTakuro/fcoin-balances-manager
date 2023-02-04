@@ -36,6 +36,7 @@ const (
 	NO_SELECTED_DATA                   ErrCode = "no_selected_data"                   // データ取得を実行したが0件だった
 	UPDATE_DATA_FAILED                 ErrCode = "update_data_failed"                 // データ更新自体に失敗
 	NO_TARGET_DATA                     ErrCode = "no_target_data"                     // 更新したい対象のデータが0件だった
+	PROCESS_TRANSACTION_FAILED         ErrCode = "process_transaction_failed"         // トランザクション処理に失敗
 )
 
 func (code ErrCode) Wrap(err error, message string) error {

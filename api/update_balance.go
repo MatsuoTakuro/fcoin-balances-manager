@@ -4,14 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/MatsuoTakuro/fcoin-balances-manager/api/params"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/apperror"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/service"
-	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -37,29 +35,26 @@ func (ub *UpdateBalance) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	reqBody := &updateBalanceReqBody{}
 
 	if err := json.NewDecoder(r.Body).Decode(reqBody); err != nil {
-		err = apperror.DECODE_REQBODY_FAILED.Wrap(err, "failed to decode request body for updating balance")
+		err = apperror.DECODE_REQBODY_FAILED.Wrap(err, fmt.Sprintf("failed to decode request body: %q", r.Body))
 		apperror.ErrorRespond(ctx, w, err)
 		return
 	}
+	defer r.Body.Close()
 
 	if err := ub.Validator.Struct(reqBody); err != nil {
 		err = apperror.BAD_PARAM.Wrap(err,
-			fmt.Sprintf("invalid request params for updating balance: %v",
-				params.InvalidBodyItems(ub.Validator, err)))
+			fmt.Sprintf("invalid request params: %v", params.InvalidBodyItems(ub.Validator, err)))
 		apperror.ErrorRespond(ctx, w, err)
 		return
 	}
 
-	strUserID := chi.URLParam(r, params.UserID.Name)
-	userID, err := strconv.ParseInt(strUserID, 10, 64)
-	if err != nil || userID < 1 {
-		err = apperror.BAD_PARAM.Wrap(err, fmt.Sprintf("invalid request params for updating balance: %s: %s",
-			params.UserID, strUserID))
+	userID, err := params.UserID.Parse(r)
+	if err != nil {
 		apperror.ErrorRespond(ctx, w, err)
 		return
 	}
 
-	balanceTrans, err := ub.Service.UpdateBalance(ctx, entity.UserID(userID), reqBody.Amount)
+	balanceTrans, err := ub.Service.UpdateBalance(ctx, userID, reqBody.Amount)
 	if err != nil {
 		apperror.ErrorRespond(ctx, w, err)
 		return

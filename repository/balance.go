@@ -53,7 +53,7 @@ func (r *Repository) GetBalanceByUserID(ctx context.Context, db Queryer, userID 
 	if err != nil {
 		if errors.Is(err, noRowErr) {
 			err = apperror.NO_SELECTED_DATA.Wrap(err,
-				fmt.Sprintf("no selected balance by user_id: %d", userID))
+				fmt.Sprintf("not found balance selected by user_id: %d", userID))
 			return nil, err
 		} else {
 			err = apperror.GET_DATA_FAILED.Wrap(err,

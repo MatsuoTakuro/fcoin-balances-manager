@@ -19,7 +19,7 @@ type RegisterUser struct {
 }
 
 type registerUserReqBody struct {
-	Name string `json:"name" validate:"required,excludesall='\""`
+	Name string `json:"name" validate:"required,min=1,max=20,excludesall='\""`
 }
 
 type registerUserRespBody struct {
@@ -33,15 +33,15 @@ func (ru *RegisterUser) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	reqBody := &registerUserReqBody{}
 
 	if err := json.NewDecoder(r.Body).Decode(reqBody); err != nil {
-		err = apperror.DECODE_REQBODY_FAILED.Wrap(err, "failed to decode request body for registering user")
+		err = apperror.DECODE_REQBODY_FAILED.Wrap(err, fmt.Sprintf("failed to decode request body: %q", r.Body))
 		apperror.ErrorRespond(ctx, w, err)
 		return
 	}
+	defer r.Body.Close()
 
 	if err := ru.Validator.Struct(reqBody); err != nil {
 		err = apperror.BAD_PARAM.Wrap(err,
-			fmt.Sprintf("invalid request params for registering user: %v",
-				params.InvalidBodyItems(ru.Validator, err)))
+			fmt.Sprintf("invalid request params: %v", params.InvalidBodyItems(ru.Validator, err)))
 		apperror.ErrorRespond(ctx, w, err)
 		return
 	}
