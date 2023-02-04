@@ -64,6 +64,9 @@ dry-migrate: ## DBスキーマを更新した場合の結果を表示する
 migrate:  ## DBスキーマの更新を実行する
 	mysqldef -u taro -p pass -h 127.0.0.1 -P 3306 fcoin-balances-db < ./_tools/mysql/init/schema.sql
 
+generate: ## 全てのgo自動生成文を実行する
+	go generate ./...
+
 help: ## makeコマンドの一覧を表示する
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 		awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
