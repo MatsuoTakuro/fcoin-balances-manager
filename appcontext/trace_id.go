@@ -33,7 +33,7 @@ func GetTracdID(ctx context.Context) int {
 		return id
 	}
 
-	log.Printf("not found trace_id: %+v", ctx)
+	log.Printf("not found trace_id in context: %+v", ctx)
 	return 0
 }
 

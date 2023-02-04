@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/MatsuoTakuro/fcoin-balances-manager/api/params"
@@ -12,7 +11,6 @@ import (
 	"github.com/MatsuoTakuro/fcoin-balances-manager/apperror"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/service"
-	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -22,7 +20,7 @@ type TransferCoins struct {
 }
 
 type transferCoinsReqBody struct {
-	UserID entity.UserID `json:"user_id" validate:"required"`
+	UserID entity.UserID `json:"user_id" validate:"required,min=1"`
 	Amount uint32        `json:"amount" validate:"required,min=1"`
 }
 
@@ -40,29 +38,27 @@ func (tc *TransferCoins) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	reqBody := &transferCoinsReqBody{}
 
 	if err := json.NewDecoder(r.Body).Decode(reqBody); err != nil {
-		err = apperror.DECODE_REQBODY_FAILED.Wrap(err, "failed to decode request body for trasferring coins")
+		err = apperror.DECODE_REQBODY_FAILED.Wrap(err, fmt.Sprintf("failed to decode request body: %q", r.Body))
 		apperror.ErrorRespond(ctx, w, err)
 		return
 	}
+	defer r.Body.Close()
 
 	if err := tc.Validator.Struct(reqBody); err != nil {
 		err = apperror.BAD_PARAM.Wrap(err,
-			fmt.Sprintf("invalid request params for trasferring coins: %v",
+			fmt.Sprintf("invalid request params: %v",
 				params.InvalidBodyItems(tc.Validator, err)))
 		apperror.ErrorRespond(ctx, w, err)
 		return
 	}
 
-	strUserID := chi.URLParam(r, params.UserID.Name)
-	userID, err := strconv.ParseInt(strUserID, 10, 64)
-	if err != nil || userID < 1 {
-		err = apperror.BAD_PARAM.Wrap(err, fmt.Sprintf("invalid request params for trasferring coins: %s: %s",
-			params.UserID, strUserID))
+	userID, err := params.UserID.Parse(r)
+	if err != nil {
 		apperror.ErrorRespond(ctx, w, err)
 		return
 	}
 
-	balanceTrans, err := tc.Service.TransferCoins(ctx, entity.UserID(userID), reqBody.UserID, reqBody.Amount)
+	balanceTrans, err := tc.Service.TransferCoins(ctx, userID, reqBody.UserID, reqBody.Amount)
 	if err != nil {
 		apperror.ErrorRespond(ctx, w, err)
 		return

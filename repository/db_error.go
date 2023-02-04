@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	MYSQL_DUPLICATE_ENTRY_ERRCODE = 1062
+	MYSQL_DUPLICATE_ENTRY_ERRCODE = 1062 // 但し、大文字・小文字は区別しない（utf8mb4_unicode_ciで設定のため）
 )
 
 var mysqlErr *mysql.MySQLError
