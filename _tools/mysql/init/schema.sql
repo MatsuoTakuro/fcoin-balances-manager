@@ -1,8 +1,8 @@
 CREATE TABLE `users` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ユーザーID',
   `name` varchar(20) NOT NULL COMMENT 'ユーザー名',
-  `created_at` DATETIME(6) NOT NULL COMMENT 'レコード作成日時',
-  `updated_at` DATETIME(6) NOT NULL COMMENT 'レコード更新日時',
+  `created_at` DATETIME(6) NOT NULL COMMENT 'ユーザー作成日時',
+  `updated_at` DATETIME(6) NOT NULL COMMENT 'ユーザー更新日時',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uix_name` (`name`) USING BTREE
 ) Engine = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'ユーザー';
@@ -11,8 +11,8 @@ CREATE TABLE `balances` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '残高ID',
   `user_id` BIGINT UNSIGNED NOT NULL COMMENT 'ユーザーID',
   `amount` BIGINT UNSIGNED NOT NULL COMMENT '残高',
-  `created_at` DATETIME(6) NOT NULL COMMENT 'レコード作成日時',
-  `updated_at` DATETIME(6) NOT NULL COMMENT 'レコード修正日時',
+  `created_at` DATETIME(6) NOT NULL COMMENT '残高作成日時',
+  `updated_at` DATETIME(6) NOT NULL COMMENT '残高更新日時',
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_user_id_on_balance` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) Engine = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '残高';
