@@ -11,11 +11,11 @@ jobs:
         ports:
           - 3306:3306
         env:
-          MYSQL_ROOT_USER: root
-          MYSQL_ROOT_PASSWORD: rootpass
-          MYSQL_DATABASE: fcoin-balances-db
-          MYSQL_USER: taro
-          MYSQL_PASSWORD: pass
+          MYSQL_ROOT_USER: root # 本来はsecret(CI用)から取得
+          MYSQL_ROOT_PASSWORD: rootpass # 本来はsecret(CI用)から取得
+          MYSQL_DATABASE: fcoin-balances-db # 本来はsecret(CI用)から取得
+          MYSQL_USER: taro # 本来はsecret(CI用)から取得
+          MYSQL_PASSWORD: pass # 本来はsecret(CI用)から取得
           TZ: 'Asia/Tokyo'
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
         options: >-
