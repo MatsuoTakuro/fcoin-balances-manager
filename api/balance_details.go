@@ -44,6 +44,7 @@ func (gb *GetBalanceDetails) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	respBody := &getBalanceDetailsRespBody{
 		Balance: shared.Balance{
+			ID:     balance.ID,
 			Amount: balance.Amount,
 		},
 	}
