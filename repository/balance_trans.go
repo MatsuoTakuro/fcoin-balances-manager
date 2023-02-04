@@ -6,6 +6,7 @@ import (
 
 	"github.com/MatsuoTakuro/fcoin-balances-manager/apperror"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
+	"github.com/MatsuoTakuro/fcoin-balances-manager/repository/optional"
 )
 
 /*
@@ -99,9 +100,9 @@ func (r *Repository) GetBalanceTransListByBalanceID(
 	}
 	defer rows.Close()
 
-	var btsOpt []*entity.BalanceTransOpt
+	var btsOpt []*optional.BalanceTrans
 	for rows.Next() {
-		btOpt := entity.BalanceTransOpt{}
+		btOpt := optional.BalanceTrans{}
 		if err := rows.Scan(
 			&btOpt.ID,
 			&btOpt.UserID,
