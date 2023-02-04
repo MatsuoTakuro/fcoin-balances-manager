@@ -23,7 +23,7 @@ paths:
           $ref: '#/components/responses/error'
         '500':
           $ref: '#/components/responses/error'
-      operationId: get-users-userId
+      operationId: get-users-user_id
       description: ''
     patch:
       summary: 独自コイン残高への追加・消費
