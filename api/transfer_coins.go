@@ -20,8 +20,8 @@ type TransferCoins struct {
 }
 
 type transferCoinsReqBody struct {
-	UserID entity.UserID `json:"user_id" validate:"required,min=1"`
-	Amount uint32        `json:"amount" validate:"required,min=1"`
+	UserID entity.UserID `json:"user_id" validate:"min=1"`
+	Amount uint32        `json:"amount" validate:"min=1"`
 }
 
 type transferCoinsRespBody struct {
