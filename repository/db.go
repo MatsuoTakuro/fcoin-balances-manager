@@ -37,6 +37,8 @@ func OpenDB(ctx context.Context, cfg *config.Config) (*sqlx.DB, func(), error) {
 	return xdb, func() { _ = db.Close() }, nil
 }
 
+//go:generate go run github.com/matryer/moq -out db_mock.go . Beginner Execer Queryer
+
 type Beginner interface {
 	BeginTx(ctx context.Context, opts *sql.TxOptions) (*sql.Tx, error)
 	Execer
