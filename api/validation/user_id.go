@@ -1,4 +1,4 @@
-package params
+package validation
 
 import (
 	"fmt"
@@ -28,14 +28,10 @@ func (pu PathUserID) Parse(r *http.Request) (entity.UserID, error) {
 	strUserID := chi.URLParam(r, pu.Name)
 	userID, err := strconv.ParseInt(strUserID, 10, 64)
 	if err != nil {
-		err = apperror.BAD_PARAM.Wrap(err, fmt.Sprintf("input (%s) cannot be parsed into %s",
-			strUserID, pu.Name))
-		return 0, err
+		return 0, apperror.BAD_PARAM.Wrap(err, fmt.Sprintf("input (%s) in path cannot be parsed into %s", strUserID, pu.Name))
 	}
 	if userID <= 0 {
-		err = apperror.NewAppError(apperror.BAD_PARAM, fmt.Sprintf("%s (input: %s) cannot be less or 0",
-			pu.Name, strUserID))
-		return 0, err
+		return 0, apperror.NewAppError(apperror.BAD_PARAM, fmt.Sprintf("%s (input: %s) in path cannot be less or 0", pu.Name, strUserID))
 	}
 
 	return entity.UserID(userID), nil

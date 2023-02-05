@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/MatsuoTakuro/fcoin-balances-manager/api"
-	"github.com/MatsuoTakuro/fcoin-balances-manager/api/params"
+	"github.com/MatsuoTakuro/fcoin-balances-manager/api/validation"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/config"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/repository"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/repository/clock"
@@ -66,9 +66,9 @@ func NewRouter(ctx context.Context, cfg *config.Config) (http.Handler, func(), e
 		Validator: v,
 	}
 	r.Route("/users", func(sub chi.Router) {
-		sub.Get(fmt.Sprintf("/{%s}", params.UserID.Path()), gb.ServeHTTP)
-		sub.Patch(fmt.Sprintf("/{%s}", params.UserID.Path()), ub.ServeHTTP)
-		sub.Post(fmt.Sprintf("/{%s}/transfer", params.UserID.Path()), tc.ServeHTTP)
+		sub.Get(fmt.Sprintf("/{%s}", validation.UserID.Path()), gb.ServeHTTP)
+		sub.Patch(fmt.Sprintf("/{%s}", validation.UserID.Path()), ub.ServeHTTP)
+		sub.Post(fmt.Sprintf("/{%s}/transfer", validation.UserID.Path()), tc.ServeHTTP)
 	})
 
 	return r, cleanup, nil

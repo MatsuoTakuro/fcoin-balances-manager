@@ -14,32 +14,34 @@ import (
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
 )
 
-func (r *Repository) BeginTx(ctx context.Context, db Beginner) (*sql.Tx, func(*sql.Tx, error) error, error) {
+func (r *Repository) BeginTx(ctx context.Context, db Beginner) (*sql.Tx, func(context.Context, *sql.Tx, error) error, error) {
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
 		return nil, nil, apperror.PROCESS_TRANSACTION_FAILED.Wrap(err, err.Error())
 	}
-	return tx, func(tx *sql.Tx, err error) error {
-		if err == nil {
-			if cErr := tx.Commit(); cErr != nil {
-				err = apperror.PROCESS_TRANSACTION_FAILED.Wrap(err, cErr.Error())
-				if rbErr := tx.Rollback(); rbErr != nil {
-					return apperror.PROCESS_TRANSACTION_FAILED.Wrap(err, rbErr.Error())
-				}
-				log.Printf("[%d]trans: rollbacked sucessfully for handling err: %v",
-					appcontext.GetTracdID(ctx), err)
-				return err
-			}
-			return nil
-		} else {
+	return tx, commitOrRollback, nil
+}
+
+func commitOrRollback(ctx context.Context, tx *sql.Tx, err error) error {
+	if err == nil {
+		if err := tx.Commit(); err != nil {
 			if rbErr := tx.Rollback(); rbErr != nil {
-				return apperror.PROCESS_TRANSACTION_FAILED.Wrap(err, err.Error())
+				return apperror.PROCESS_TRANSACTION_FAILED.Wrap(err, rbErr.Error())
 			}
+			err = apperror.PROCESS_TRANSACTION_FAILED.Wrap(err, err.Error())
 			log.Printf("[%d]trans: rollbacked sucessfully for handling err: %v",
 				appcontext.GetTracdID(ctx), err)
 			return err
 		}
-	}, nil
+		return nil
+	} else {
+		if rbErr := tx.Rollback(); rbErr != nil {
+			return apperror.PROCESS_TRANSACTION_FAILED.Wrap(err, rbErr.Error())
+		}
+		log.Printf("[%d]trans: rollbacked sucessfully for handling err: %v",
+			appcontext.GetTracdID(ctx), err)
+		return err
+	}
 }
 
 func (r *Repository) RegisterUserTx(
@@ -48,7 +50,7 @@ func (r *Repository) RegisterUserTx(
 
 	tx, commitOrRollback, err := r.BeginTx(ctx, db)
 	defer func() {
-		if txErr := commitOrRollback(tx, err); txErr != nil {
+		if txErr := commitOrRollback(ctx, tx, err); txErr != nil {
 			err = txErr
 		}
 	}()
@@ -73,7 +75,7 @@ func (r *Repository) UpdateBalanceTx(
 
 	tx, commitOrRollback, err := r.BeginTx(ctx, db)
 	defer func() {
-		if txErr := commitOrRollback(tx, err); txErr != nil {
+		if txErr := commitOrRollback(ctx, tx, err); txErr != nil {
 			err = txErr
 		}
 	}()
@@ -97,7 +99,7 @@ func (r *Repository) TransferCoinsTx(
 
 	tx, commitOrRollback, err := r.BeginTx(ctx, db)
 	defer func() {
-		if txErr := commitOrRollback(tx, err); txErr != nil {
+		if txErr := commitOrRollback(ctx, tx, err); txErr != nil {
 			err = txErr
 		}
 	}()

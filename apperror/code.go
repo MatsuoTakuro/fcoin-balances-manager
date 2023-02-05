@@ -39,10 +39,18 @@ const (
 	PROCESS_TRANSACTION_FAILED         ErrCode = "process_transaction_failed"         // トランザクション処理に失敗
 )
 
-func (code ErrCode) Wrap(err error, message string) error {
+func (code ErrCode) Wrap(err error, messages ...string) error {
 	return &AppError{
 		ErrCode:    code,
-		ErrMessage: message,
+		ErrMessage: messages,
+		Err:        err,
+	}
+}
+
+func (code ErrCode) WrapWithErrMessages(err error, messages []string) error {
+	return &AppError{
+		ErrCode:    code,
+		ErrMessage: messages,
 		Err:        err,
 	}
 }

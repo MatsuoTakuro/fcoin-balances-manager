@@ -48,8 +48,8 @@ func Logging() func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			reqBody, err := io.ReadAll(r.Body)
 			if err != nil {
-				err = apperror.UNKNOWN_ERR.Wrap(err, "faild to read req body for logging")
-				apperror.ErrorRespond(r.Context(), w, err)
+				apperror.ErrorRespond(r.Context(), w,
+					apperror.UNKNOWN_ERR.Wrap(err, "faild to read req body for logging"))
 			}
 			defer r.Body.Close()
 			traceID := appcontext.NewTraceID()

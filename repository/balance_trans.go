@@ -24,14 +24,12 @@ func (r *Repository) CreateBalanceTrans(
 	processedAt := r.Clocker.Now()
 	result, err := db.ExecContext(ctx, sql, userID, balanceID, amount, processedAt)
 	if err != nil {
-		err = apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to create balance_trans")
-		return nil, err
+		return nil, apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to create balance_trans")
 	}
 
 	id, err := result.LastInsertId()
 	if err != nil {
-		err = apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to get inserted balance_trans_id")
-		return nil, err
+		return nil, apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to get inserted balance_trans_id")
 	}
 
 	balanceTrans := &entity.BalanceTrans{
@@ -60,14 +58,12 @@ func (r *Repository) CreateBalanceTransByTransfer(
 	processedAt := r.Clocker.Now()
 	result, err := db.ExecContext(ctx, sql, userID, balanceID, TransferTransID, amount, processedAt)
 	if err != nil {
-		err = apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to create balance_trans by tranfer")
-		return nil, err
+		return nil, apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to create balance_trans by tranfer")
 	}
 
 	id, err := result.LastInsertId()
 	if err != nil {
-		err = apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to get inserted balance_trans_id")
-		return nil, err
+		return nil, apperror.REGISTER_DATA_FAILED.Wrap(err, "failed to get inserted balance_trans_id")
 	}
 
 	balanceTrans := &entity.BalanceTrans{
@@ -94,9 +90,7 @@ func (r *Repository) GetBalanceTransListByBalanceID(
 					ORDER BY bt.processed_at ASC`
 	rows, err := db.QueryxContext(ctx, sql, balanceID)
 	if err != nil {
-		err = apperror.GET_DATA_FAILED.Wrap(err,
-			fmt.Sprintf("failed to get balance_trans by balance_id: %d", balanceID))
-		return nil, err
+		return nil, apperror.GET_DATA_FAILED.Wrap(err, fmt.Sprintf("failed to get balance_trans by balance_id: %d", balanceID))
 	}
 	defer rows.Close()
 
@@ -117,9 +111,7 @@ func (r *Repository) GetBalanceTransListByBalanceID(
 			&btOpt.Amount,
 			&btOpt.ProcessedAt,
 		); err != nil {
-			err = apperror.GET_DATA_FAILED.Wrap(err,
-				fmt.Sprintf("failed to scan balance_trans gotten by balance_id: %d", balanceID))
-			return nil, err
+			return nil, apperror.GET_DATA_FAILED.Wrap(err, fmt.Sprintf("failed to scan balance_trans gotten by balance_id: %d", balanceID))
 		}
 		btsOpt = append(btsOpt, &btOpt)
 	}

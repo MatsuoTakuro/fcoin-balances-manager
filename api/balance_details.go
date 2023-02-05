@@ -3,8 +3,8 @@ package api
 import (
 	"net/http"
 
-	"github.com/MatsuoTakuro/fcoin-balances-manager/api/params"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/api/shared"
+	"github.com/MatsuoTakuro/fcoin-balances-manager/api/validation"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/apperror"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/service"
 	"github.com/go-playground/validator/v10"
@@ -23,8 +23,8 @@ type getBalanceDetailsRespBody struct {
 func (gb *GetBalanceDetails) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	userID, err := params.UserID.Parse(r)
-	if err != nil {
+	userID, err := validation.UserID.Parse(r)
+	if err != nil || userID == 0 {
 		apperror.ErrorRespond(ctx, w, err)
 		return
 	}
