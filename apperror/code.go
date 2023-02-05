@@ -41,16 +41,16 @@ const (
 
 func (code ErrCode) Wrap(err error, messages ...string) error {
 	return &AppError{
-		ErrCode:    code,
-		ErrMessage: messages,
-		Err:        err,
+		ErrCode:     code,
+		ErrMessages: messages,
+		Err:         err,
 	}
 }
 
 func (code ErrCode) WrapWithErrMessages(err error, messages []string) error {
 	return &AppError{
-		ErrCode:    code,
-		ErrMessage: messages,
-		Err:        err,
+		ErrCode:     code,
+		ErrMessages: messages,
+		Err:         err,
 	}
 }
