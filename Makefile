@@ -14,7 +14,7 @@ watch_apis_specs: ## API仕様書をローカルサーバで起動・閲覧す�
 update_docs: render_er_diagram_to_svg render_apis_specs_to_md ## ドキュメントを一式更新する
 
 build: ## サービス（app）をビルドする
-	docker compose build --no-cache
+	docker compose build
 
 run: ## buildされたサービス（appとdb）を起動する
 	docker compose up -d
@@ -42,6 +42,9 @@ status: ## サービス（appとdb）のステータスを確認する
 log_app: ## appのログを閲覧する
 	docker compose logs app --no-log-prefix
 
+log_app_on_watch: ## appのログを監視する
+	docker compose logs app --follow --no-log-prefix
+
 log_db: ## appのログを閲覧する
 	docker compose logs db --no-log-prefix
 
@@ -63,6 +66,9 @@ dry-migrate: ## DBスキーマを更新した場合の結果を表示する
 
 migrate:  ## DBスキーマの更新を実行する
 	mysqldef -u taro -p pass -h 127.0.0.1 -P 3306 fcoin-balances-db < ./_tools/mysql/init/schema.sql
+
+generate: ## 全てのgo自動生成文を実行する
+	go generate ./...
 
 help: ## makeコマンドの一覧を表示する
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \

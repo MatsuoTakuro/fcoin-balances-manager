@@ -1,0 +1,6 @@
+{
+  "err_code": "bad_param",
+  "err_message": [
+      "Name (input:) violates required(=) validation"
+  ]
+}

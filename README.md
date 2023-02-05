@@ -16,7 +16,7 @@
 
     ```sh
     make up
-    docker compose build --no-cache
+    docker compose build
     [+] Building 13.6s (14/15)
     => [internal] load build definition from Dockerfile 0.0s
     => => transferring dockerfile: 32B
@@ -30,8 +30,8 @@
     ⠿ Network fcoin-balances-manager_default  Created     0.0s
     ⠿ Container fcoin-balances-db             Healthy     10.9s
     ⠿ Container fcoin-balances-manager        Started     11.2s
-    
-    # 正常に起動しているかを確認 
+
+    # 正常に起動しているかを確認
     docker compose ps
     NAME                     COMMAND                  SERVICE             STATUS              PORTS
     fcoin-balances-db        "docker-entrypoint.s…"   db                  running (healthy)   0.0.0.0:3306->3306/tcp, 33060/tcp

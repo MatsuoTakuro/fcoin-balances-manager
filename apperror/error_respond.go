@@ -22,7 +22,7 @@ func ErrorRespond(ctx context.Context, w http.ResponseWriter, err error) {
 
 	traceID := appcontext.GetTracdID(ctx)
 	log.Printf("[%d]error: %s: %s -> %s\n",
-		traceID, appErr.ErrCode, appErr.ErrMessage, appErr.Err)
+		traceID, appErr.ErrCode, appErr.ErrMessage, appErr.Error())
 
 	var statusCode int
 	switch appErr.ErrCode {

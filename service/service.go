@@ -6,6 +6,8 @@ import (
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
 )
 
+//go:generate go run github.com/matryer/moq -out service_mock.go . RegisterUserService UpdateBalanceService TransferCoinsService GetBalanceDetails
+
 type RegisterUserService interface {
 	RegisterUser(ctx context.Context, name string) (*entity.User, *entity.Balance, error)
 }

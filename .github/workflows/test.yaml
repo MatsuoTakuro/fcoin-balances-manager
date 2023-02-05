@@ -1,0 +1,35 @@
+name: test
+on:
+  push:
+    branches:
+      - '**'
+jobs:
+  golangci:
+    services:
+      mysql:
+        image: mysql:8.0.32
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_USER: root # 本来はsecret(CI用)から取得
+          MYSQL_ROOT_PASSWORD: rootpass # 本来はsecret(CI用)から取得
+          MYSQL_DATABASE: fcoin-balances-db # 本来はsecret(CI用)から取得
+          MYSQL_USER: taro # 本来はsecret(CI用)から取得
+          MYSQL_PASSWORD: pass # 本来はsecret(CI用)から取得
+          TZ: 'Asia/Tokyo'
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        options: >-
+          --health-cmd "mysqladmin ping -h 127.0.0.1"
+          --health-interval 20s
+          --health-timeout 10s
+          --health-retries 10
+    strategy:
+      matrix:
+        go-version: [1.19.x]
+        os: [ubuntu-latest]
+    name: test
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: go test
+        run: bash -c 'go test -v -race -shuffle=on -covermode=atomic ./...'

@@ -16,16 +16,16 @@ func Respond(ctx context.Context, w http.ResponseWriter, respBody any, statusCod
 
 	bodyBytes, err := json.Marshal(respBody)
 	if err != nil {
-		err = apperror.ENCODE_RESPBODY_FAILED.Wrap(err, "failed to encode response")
-		apperror.ErrorRespond(ctx, w, err)
+		apperror.ErrorRespond(ctx, w,
+			apperror.ENCODE_RESPBODY_FAILED.Wrap(err, "failed to encode response"))
 		return
 	}
 
 	w.WriteHeader(statusCode)
 
 	if _, err := fmt.Fprintf(w, "%s", bodyBytes); err != nil {
-		err = apperror.WRITE_RESPBODY_FAILED.Wrap(err, "failed to write response")
-		apperror.ErrorRespond(ctx, w, err)
+		apperror.ErrorRespond(ctx, w,
+			apperror.WRITE_RESPBODY_FAILED.Wrap(err, "failed to write response"))
 		return
 	}
 }
