@@ -1,14 +1,14 @@
-package api
+package handler
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
 
-	"github.com/MatsuoTakuro/fcoin-balances-manager/api/shared"
-	"github.com/MatsuoTakuro/fcoin-balances-manager/api/validation"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/apperror"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
+	"github.com/MatsuoTakuro/fcoin-balances-manager/handler/shared"
+	"github.com/MatsuoTakuro/fcoin-balances-manager/handler/validation"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/service"
 	"github.com/go-playground/validator/v10"
 )

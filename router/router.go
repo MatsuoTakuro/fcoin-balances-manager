@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/MatsuoTakuro/fcoin-balances-manager/api"
-	"github.com/MatsuoTakuro/fcoin-balances-manager/api/validation"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/config"
+	"github.com/MatsuoTakuro/fcoin-balances-manager/handler"
+	"github.com/MatsuoTakuro/fcoin-balances-manager/handler/validation"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/repository"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/repository/clock"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/router/middleware"
@@ -35,7 +35,7 @@ func NewRouter(ctx context.Context, cfg *config.Config) (http.Handler, func(), e
 	r.Use(middleware.Logging())
 
 	// 以下、各API（ハンドラ）に対して、実装されたservice・dbと、公開するpathを割り当てる
-	ru := &api.RegisterUser{
+	ru := &handler.RegisterUser{
 		Service: &service.RegisterUserServicer{
 			DB:   db,
 			Repo: &repo,
@@ -44,21 +44,21 @@ func NewRouter(ctx context.Context, cfg *config.Config) (http.Handler, func(), e
 	}
 	r.Post("/user", ru.ServeHTTP)
 
-	gb := &api.GetBalanceDetails{
+	gb := &handler.GetBalanceDetails{
 		Service: &service.GetBalanceDetailsServicer{
 			DB:   db,
 			Repo: &repo,
 		},
 		Validator: v,
 	}
-	ub := &api.UpdateBalance{
+	ub := &handler.UpdateBalance{
 		Service: &service.UpdateBalanceServicer{
 			DB:   db,
 			Repo: &repo,
 		},
 		Validator: v,
 	}
-	tc := &api.TransferCoins{
+	tc := &handler.TransferCoins{
 		Service: &service.TransferCoinsServicer{
 			DB:   db,
 			Repo: &repo,
