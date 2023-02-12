@@ -44,6 +44,7 @@ func commitOrRollback(ctx context.Context, tx *sql.Tx, err error) error {
 	}
 }
 
+// 新規ユーザの登録と残高作成を行うトランザクション処理
 func (r *Repository) RegisterUserTx(
 	ctx context.Context, db Beginner, name string,
 ) (user *entity.User, balance *entity.Balance, err error) {

@@ -10,7 +10,7 @@ const (
 	UNKNOWN_ERR ErrCode = "unknown_error"
 
 	/*
-		api層のエラー
+		handler層のエラー
 	*/
 
 	DECODE_REQBODY_FAILED  ErrCode = "decode_req_body_failed"  // リクエストデータの読み込みに失敗

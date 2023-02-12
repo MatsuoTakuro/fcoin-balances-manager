@@ -11,7 +11,7 @@ import (
 
 type TransferCoinsServicer struct {
 	DB   repository.Beginner
-	Repo repository.TransferCoinsRepo
+	Repo repository.CoinsTransferRepo
 }
 
 func (tc *TransferCoinsServicer) TransferCoins(

@@ -16,7 +16,8 @@ func (r *Repository) CreateBalance(
 					user_id, amount, created_at, updated_at
 					) VALUES (?, ?, ?, ?)`
 
-	result, err := db.ExecContext(ctx, sql, userID, 0, r.Clocker.Now(), r.Clocker.Now())
+	currentTime := r.Clocker.Now()
+	result, err := db.ExecContext(ctx, sql, userID, 0, currentTime, currentTime)
 	if err != nil {
 		if isDuplicateEntryErr(err) {
 			return nil, apperror.REGISTER_DUPLICATE_DATA_RESTRICTED.Wrap(err, fmt.Sprintf("can create only one balance per same user_id: %d", userID))
@@ -30,9 +31,11 @@ func (r *Repository) CreateBalance(
 	}
 
 	balance := &entity.Balance{
-		ID:     entity.BalanceID(id),
-		UserID: userID,
-		Amount: 0,
+		ID:        entity.BalanceID(id),
+		UserID:    userID,
+		Amount:    0,
+		CreatedAt: currentTime,
+		UpdatedAt: currentTime,
 	}
 
 	return balance, nil
