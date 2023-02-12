@@ -5,11 +5,11 @@ on:
       - '**'
 jobs:
   test:
-    name: Run tests
+    name: Run test
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - name: Checkout And Build
+      - name: Build And Run
         run: |
           docker compose \
             -f docker-compose.yaml \
@@ -21,4 +21,5 @@ jobs:
           docker compose \
             -f docker-compose.yaml \
             --env-file .env \
-            exec app go test -v -coverpkg=./... ./.../test
+            exec app \
+            go test -v -race -shuffle=on -covermode=atomic ./...
