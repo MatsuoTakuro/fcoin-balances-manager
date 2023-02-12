@@ -10,7 +10,7 @@ import (
 
 	"github.com/MatsuoTakuro/fcoin-balances-manager/entity"
 	"github.com/MatsuoTakuro/fcoin-balances-manager/service"
-	handler "github.com/MatsuoTakuro/fcoin-balances-manager/testutil/api"
+	utils "github.com/MatsuoTakuro/fcoin-balances-manager/testutil/handler"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -71,13 +71,13 @@ func TestRegisterUser(t *testing.T) {
 			r := httptest.NewRequest(
 				http.MethodPost,
 				"/user",
-				bytes.NewReader(handler.LoadJSONFile(t, sub.reqFilePath)),
+				bytes.NewReader(utils.LoadJSONFile(t, sub.reqFilePath)),
 			)
 
 			ru.ServeHTTP(w, r)
 
 			resp := w.Result()
-			handler.AssertResponse(t, resp, sub.want.statusCode, handler.LoadJSONFile(t, sub.want.respFilePath))
+			utils.AssertResponse(t, resp, sub.want.statusCode, utils.LoadJSONFile(t, sub.want.respFilePath))
 		})
 	}
 }

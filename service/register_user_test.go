@@ -12,32 +12,36 @@ import (
 func TestRegisterUser(t *testing.T) {
 	t.Parallel()
 
-	wantUser := &entity.User{
+	normalUser := &entity.User{
 		ID:   1,
 		Name: "taro",
 	}
-	wantBalance := &entity.Balance{
-		UserID: 1,
+	normalBalance := &entity.Balance{
+		UserID: normalUser.ID,
 		Amount: 0,
 	}
-	type otherMocks struct {
-		name string
-		err  error
+	type mocks struct {
+		pname    string
+		ruser    *entity.User
+		rbalance *entity.Balance
+		rerr     error
 	}
 
 	tests := map[string]struct {
 		wantUser    *entity.User
 		wantBalance *entity.Balance
 		wantErr     error
-		others      otherMocks
+		mocks       mocks
 	}{
 		"normal": {
-			wantUser:    wantUser,
-			wantBalance: wantBalance,
+			wantUser:    normalUser,
+			wantBalance: normalBalance,
 			wantErr:     nil,
-			others: otherMocks{
-				name: "taro",
-				err:  nil,
+			mocks: mocks{
+				pname:    normalUser.Name,
+				ruser:    normalUser,
+				rbalance: normalBalance,
+				rerr:     nil,
 			},
 		},
 	}
@@ -59,25 +63,19 @@ func TestRegisterUser(t *testing.T) {
 				if mockDb != pdb {
 					t.Fatalf("want db: %v ,got %v", mockDb, pdb)
 				}
-				if sub.others.name != pname {
-					t.Fatalf("want name: %s ,got %s", sub.others.name, pname)
+				if sub.mocks.pname != pname {
+					t.Fatalf("want name: %s ,got %s", sub.mocks.pname, pname)
 				}
-				return &entity.User{
-						ID:   1,
-						Name: "taro",
-					}, &entity.Balance{
-						UserID: 1,
-						Amount: 0,
-					}, nil
+				return sub.mocks.ruser, sub.mocks.rbalance, sub.mocks.rerr
 			}
 
 			ru := &RegisterUserServicer{
 				DB:   mockDb,
 				Repo: mockRepo,
 			}
-			gotUser, gotBalance, gotErr := ru.RegisterUser(ctx, sub.others.name)
-			if gotErr != sub.others.err {
-				t.Fatalf("want error(including nil): %v, but got %v", sub.others.err, gotErr)
+			gotUser, gotBalance, gotErr := ru.RegisterUser(ctx, sub.mocks.pname)
+			if gotErr != sub.mocks.rerr {
+				t.Fatalf("want error(including nil): %v, but got %v", sub.mocks.rerr, gotErr)
 			}
 			if u := cmp.Diff(gotUser, sub.wantUser); len(u) != 0 {
 				t.Errorf("differs: (-got +want)\n%s", u)
