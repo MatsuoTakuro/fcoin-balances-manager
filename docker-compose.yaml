@@ -6,8 +6,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-      args:
-        - target=dev
+      target: builder
     command: go run ./cmd/main.go
     environment:
       HTTP_PORT: 8080
