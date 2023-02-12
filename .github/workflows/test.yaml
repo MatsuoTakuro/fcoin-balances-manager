@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - name: Build
+      - name: Build And Run
         run: |
           docker compose \
-            -f docker-compose-test.yaml \
+            -f docker-compose.yaml \
             --env-file .env \
             up -d
 
