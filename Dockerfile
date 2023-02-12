@@ -5,6 +5,6 @@ RUN go mod download
 COPY . ./
 RUN cd cmd && go build -trimpath -ldflags="-w -s" -o "fcoin-balances-manager"
 
-FROM gcr.io/distroless/base-debian11 as dev
+FROM gcr.io/distroless/base-debian11 as deploy
 COPY --from=builder opt/app/cmd/fcoin-balances-manager /fcoin-balances-manager
 CMD ["/fcoin-balances-manager"]
