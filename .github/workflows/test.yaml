@@ -16,6 +16,11 @@ jobs:
             --env-file .env \
             up -d
 
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.19
+
       - name: Test
         run: |
             go test -v -race -shuffle=on -covermode=atomic ./...
