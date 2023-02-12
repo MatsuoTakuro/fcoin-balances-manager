@@ -12,13 +12,13 @@ jobs:
       - name: Checkout And Build
         run: |
           docker compose \
-            -f docker-compose.test.yaml \
+            -f docker-compose.yaml \
             --env-file .env \
             up -d
 
       - name: Test
         run: |
           docker compose \
-            -f docker-compose.test.yaml \
+            -f docker-compose.yaml \
             --env-file .env \
             exec app go test -v -coverpkg=./... ./.../test
