@@ -12,7 +12,7 @@ jobs:
       - name: Build
         run: |
           docker compose \
-            -f docker-compose.test.yaml \
+            -f docker-compose-test.yaml \
             --env-file .env \
             up -d
 
