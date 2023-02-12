@@ -13,6 +13,8 @@ require (
 )
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0
+	github.com/DATA-DOG/go-txdb v0.1.5
 	github.com/caarlos0/env/v6 v6.10.1
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect

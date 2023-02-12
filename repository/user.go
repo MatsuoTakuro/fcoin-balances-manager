@@ -15,7 +15,8 @@ func (r *Repository) CreateUser(
 		name, created_at, updated_at
 	) VALUES (?, ?, ?)`
 
-	result, err := db.ExecContext(ctx, sql, name, r.Clocker.Now(), r.Clocker.Now())
+	currentTime := r.Clocker.Now()
+	result, err := db.ExecContext(ctx, sql, name, currentTime, currentTime)
 	if err != nil {
 		if isDuplicateEntryErr(err) {
 			return nil, apperror.REGISTER_DUPLICATE_DATA_RESTRICTED.Wrap(err, fmt.Sprintf("cannot create same name user: %s", name))
@@ -29,8 +30,10 @@ func (r *Repository) CreateUser(
 	}
 
 	user := &entity.User{
-		ID:   entity.UserID(id),
-		Name: name,
+		ID:        entity.UserID(id),
+		Name:      name,
+		CreatedAt: currentTime,
+		UpdatedAt: currentTime,
 	}
 
 	return user, nil
