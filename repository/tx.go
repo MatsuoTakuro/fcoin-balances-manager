@@ -69,10 +69,11 @@ func (r *Repository) RegisterUserTx(
 	defer func() {
 		// defer関数内でcommitOrRollback関数を呼び出す
 		// errとは別に、txErr変数を定義・初期化する
+		// txErrがnilである場合、errの値は上書かれず、そのまま本メソッド（RegisterUserTx）の呼び出し元に返却される
 		if txErr := commitOrRollback(ctx, tx, err); txErr != nil {
-			// 返り値であるerrにtxErrを代入（上書き）する
-			// 最終的に、このerrが本メソッド（RegisterUserTx）の呼び出し元に返却される
+			// txErrがnilでない場合、返り値であるerrにtxErrを代入（上書き）する
 			err = txErr
+			// 上書かれたこのerrの値が、本メソッド（RegisterUserTx）の呼び出し元に返却される
 		}
 	}()
 
